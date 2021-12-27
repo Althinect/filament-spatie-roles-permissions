@@ -1,0 +1,58 @@
+{
+    "name": "althinect/filament-spatie-roles-permissions",
+    "description": "",
+    "keywords": [
+        "althinect",
+        "filament-spatie-roles-permissions"
+    ],
+    "homepage": "https://github.com/althinect/filament-spatie-roles-permissions",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Althinect",
+            "email": "opensource@althinect.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2",
+        "filament/filament": "^3.0",
+        "illuminate/support": "^9|^10|^11|^12.0",
+        "spatie/laravel-permission": "^5.4|^6.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10",
+        "orchestra/testbench": "^7.0|^9.0|^10.0",
+        "phpunit/phpunit": "^9.0|^10.5|^11.5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Althinect\\FilamentSpatieRolesPermissions\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Althinect\\FilamentSpatieRolesPermissions\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Althinect\\FilamentSpatieRolesPermissions\\FilamentSpatieRolesPermissionsServiceProvider"
+            ],
+            "aliases": {
+                "FilamentSpatieRolesPermissions": "Althinect\\FilamentSpatieRolesPermissions\\FilamentSpatieRolesPermissionsFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
