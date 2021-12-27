@@ -6,6 +6,7 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\EditPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ListPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
+use Filament\Forms\Components\BelongsToManyMultiSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -13,7 +14,8 @@ use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
 use Spatie\Permission\Models\Permission;
 
-class PermissionResource extends Resource {
+class PermissionResource extends Resource
+{
 
     protected static ?string $model = Permission::class;
 
@@ -27,6 +29,8 @@ class PermissionResource extends Resource {
             ->schema([
                 TextInput::make('name'),
                 TextInput::make('guard_name'),
+                BelongsToManyMultiSelect::make('roles')
+                    ->relationship('roles', 'name')
             ]);
     }
 
@@ -37,10 +41,23 @@ class PermissionResource extends Resource {
                 TextColumn::make('id')->label('ID'),
                 TextColumn::make('name'),
                 TextColumn::make('guard_name'),
+                
             ])
             ->filters([
                 //
             ]);
+            // ->prependBulkActions([
+            //     BulkAction::make('Attach to Role')
+            //         ->form([
+            //             Select::make('Role')->options(Role::all()->pluck('name', 'id'))
+            //         ])
+            //         ->action(function (Collection $permissions) {
+            //             $permissions->id
+            //         })
+            //         ->requiresConfirmation()
+            //         ->color('success')
+            //         ->icon('heroicon-o-check'),
+            // ]);
     }
 
     public static function getRelations(): array
@@ -53,10 +70,10 @@ class PermissionResource extends Resource {
     public static function getPages(): array
     {
         return [
-            'index' => ListPermissions::route('/'),
+            'index'  => ListPermissions::route('/'),
             'create' => CreatePermission::route('/create'),
-            'edit' => EditPermission::route('/{record}/edit'),
-            'view' => ViewPermission::route('/{record}')
+            'edit'   => EditPermission::route('/{record}/edit'),
+            'view'   => ViewPermission::route('/{record}')
         ];
     }
 }
