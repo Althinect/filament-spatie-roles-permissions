@@ -39,9 +39,9 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID'),
-                TextColumn::make('name'),
-                TextColumn::make('guard_name'),
+                TextColumn::make('id')->label('ID')->searchable(),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('guard_name')->searchable(),
             ])
             ->filters([
                 //
