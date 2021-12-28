@@ -1,10 +1,10 @@
-# Very short description of the package
+# Description
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 [![Total Downloads](https://img.shields.io/packagist/dt/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 ![GitHub Actions](https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package provide a quick scaffolding 
 
 ## Installation
 
@@ -14,34 +14,14 @@ You can install the package via composer:
 composer require althinect/filament-spatie-roles-permissions
 ```
 
-## Usage
-
-```php
-// Usage description here
-```
-
-### Testing
-
-```bash
-composer test
-```
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
 ### Security
 
-If you discover any security related issues, please email tharindarodrigo@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please create an issue.
 
 ## Credits
 
--   [Tharinda Rodrigo](https://github.com/althinect)
--   [All Contributors](../../contributors)
+-   [Tharinda Rodrigo](https://github.com/UdamLiyanage/)
+-   [Udam Liyanage](https://github.com/UdamLiyanage/)
 
 ## License
 
