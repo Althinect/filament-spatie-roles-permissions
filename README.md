@@ -14,6 +14,18 @@ You can install the package via composer:
 composer require althinect/filament-spatie-roles-permissions
 ```
 
+## Usage
+
+You can add this to your *form* method in your UserResource 
+
+```php
+return $form->schema([
+    ...
+    BelongsToManyMultiSelect::make('roles')->relationship('roles', 'name')
+])
+
+```
+
 ### Security
 
 If you discover any security related issues, please create an issue.
