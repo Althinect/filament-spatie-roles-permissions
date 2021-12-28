@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages;
 
@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
 class ListPermissions extends ListRecords
 {
     protected static string $resource = PermissionResource::class;
-    
+
     protected function getTableBulkActions() :array {
         return [
             BulkAction::make('Attach Role')
@@ -27,11 +27,11 @@ class ListPermissions extends ListRecords
             })
             ->form([
                 Select::make('role')
-                    ->label('Role')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
                     ->options(Role::query()->pluck('name', 'id'))
                     ->required(),
             ])->deselectRecordsAfterCompletion()
         ];
-        
+
     }
 }

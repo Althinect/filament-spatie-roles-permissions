@@ -20,8 +20,10 @@ class RoleRelationManager extends BelongsToManyRelationManager
     {
         return $form
             ->schema([
-                TextInput::make('name'),
+                TextInput::make('name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                 TextInput::make('guard_name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
 
             ]);
     }
@@ -30,8 +32,10 @@ class RoleRelationManager extends BelongsToManyRelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('guard_name'),
+                TextColumn::make('name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                TextColumn::make('guard_name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
 
             ])
             ->filters([
