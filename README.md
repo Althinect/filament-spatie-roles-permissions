@@ -14,7 +14,12 @@ You can install the package via composer:
 composer require althinect/filament-spatie-roles-permissions
 ```
 
-Now you should add the configurations needed for the Spatie-Permission package
+Since the package depends on [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. You have to publish the migrations by running:
+```bash
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+
+Now you should add any other configurations needed for the Spatie-Permission package.
 
 ## Usage
 
@@ -27,6 +32,8 @@ return $form->schema([
 ])
 
 ```
+
+In addition to the field added to the UserResource. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
 
 ### Security
 
