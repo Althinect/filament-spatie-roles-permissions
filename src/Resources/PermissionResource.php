@@ -7,12 +7,16 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ListPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Filament\Forms\Components\BelongsToManyMultiSelect;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionResource extends Resource
 {
@@ -46,18 +50,6 @@ class PermissionResource extends Resource
             ->filters([
                 //
             ]);
-            // ->prependBulkActions([
-            //     BulkAction::make('Attach to Role')
-            //         ->form([
-            //             Select::make('Role')->options(Role::all()->pluck('name', 'id'))
-            //         ])
-            //         ->action(function (Collection $permissions) {
-            //             $permissions->id
-            //         })
-            //         ->requiresConfirmation()
-            //         ->color('success')
-            //         ->icon('heroicon-o-check'),
-            // ]);
     }
 
     public static function getRelations(): array
