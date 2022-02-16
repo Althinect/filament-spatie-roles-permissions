@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0|^8.1",
-        "filament/filament": "^2.0",
+        "filament/filament": "^2.0|^2.1",
         "illuminate/support": "^8|^9",
         "spatie/laravel-permission": "^5.4"
     },
