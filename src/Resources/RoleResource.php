@@ -8,6 +8,8 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ListRo
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ViewRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\PermissionRelationManager;
 use Filament\Forms\Components\BelongsToManyMultiSelect;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -41,13 +43,19 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                Card::make()
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                 TextInput::make('guard_name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
                 BelongsToManyMultiSelect::make('permissions')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                     ->relationship('permissions', 'name')
+                            ])
+                    ])
             ]);
     }
 
