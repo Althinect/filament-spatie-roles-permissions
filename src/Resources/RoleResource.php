@@ -48,12 +48,12 @@ class RoleResource extends Resource
                         Grid::make(2)
                             ->schema([
                                 TextInput::make('name')
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
-                TextInput::make('guard_name')
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
-                BelongsToManyMultiSelect::make('permissions')
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
-                    ->relationship('permissions', 'name')
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                                TextInput::make('guard_name')
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                                BelongsToManyMultiSelect::make('permissions')
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
+                                    ->relationship('permissions', 'name')
                             ])
                     ])
             ]);
