@@ -26,9 +26,22 @@ class PermissionResource extends Resource
 
     protected static ?string $model = Permission::class;
 
-    protected static ?string $navigationGroup = 'Roles and Permissions';
-
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
+
+    public static function getLabel(): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.permission');
+    }
+
+    protected static function getNavigationGroup(): ?string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.permissions');
+    }
 
     public static function form(Form $form): Form
     {
@@ -37,10 +50,13 @@ class PermissionResource extends Resource
                 Card::make()
                     ->schema([
                         Grid::make(2)->schema([
-                            TextInput::make('name'),
-                            TextInput::make('guard_name'),
-                            BelongsToManyMultiSelect::make('roles')
-                                ->relationship('roles', 'name')
+                            TextInput::make('name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                TextInput::make('guard_name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                BelongsToManyMultiSelect::make('roles')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
+                    ->relationship('roles', 'name')
                         ])
                     ])
             ]);
@@ -50,10 +66,15 @@ class PermissionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID')->searchable(),
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('guard_name')->searchable(),
-
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->searchable(),
+                TextColumn::make('name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
+                    ->searchable(),
+                TextColumn::make('guard_name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                    ->searchable(),
             ])
             ->filters([
                 //
