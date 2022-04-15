@@ -54,6 +54,7 @@ class RoleResource extends Resource
                                 BelongsToManyMultiSelect::make('permissions')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
+                                    ->preload(config('filament-spatie-roles-permissions.preload_permissions'))
                             ])
                     ])
             ]);
