@@ -27,7 +27,7 @@ class PermissionResource extends Resource
 
     public static function getModel(): string
     {
-        return config('permission.models.permission');
+        return config('permission.models.permission', Permission::class);
     }
 
     public static function getLabel(): string

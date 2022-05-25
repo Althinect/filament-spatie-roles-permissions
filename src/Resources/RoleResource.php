@@ -23,7 +23,7 @@ class RoleResource extends Resource
 
     public static function getModel(): string
     {
-        return config('permission.models.role');
+        return config('permission.models.role', Role::class);
     }
 
     public static function getLabel(): string
