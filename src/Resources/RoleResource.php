@@ -19,10 +19,12 @@ use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
-
-    protected static ?string $model = Role::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getModel(): string
+    {
+        return config('permission.models.role', Role::class);
+    }
 
     public static function getLabel(): string
     {
