@@ -28,6 +28,11 @@ class PermissionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
+    public function __construct()
+    {
+        self::$model = config('permission.models.permission');
+    }
+
     public static function getLabel(): string
     {
         return __('filament-spatie-roles-permissions::filament-spatie.section.permission');

@@ -24,6 +24,11 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public function __construct()
+    {
+        self::$model = config('permission.models.role');
+    }
+
     public static function getLabel(): string
     {
         return __('filament-spatie-roles-permissions::filament-spatie.section.role');
