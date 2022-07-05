@@ -16,6 +16,8 @@ class ListPermissions extends ListRecords
     protected static string $resource = PermissionResource::class;
 
     protected function getTableBulkActions() :array {
+        $roleModel = config('permission.models.role');
+
         return [
             BulkAction::make('Attach Role')
             ->action(function (Collection $records, array $data): void {
@@ -28,7 +30,7 @@ class ListPermissions extends ListRecords
             ->form([
                 Select::make('role')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
-                    ->options(Role::query()->pluck('name', 'id'))
+                    ->options($roleModel::query()->pluck('name', 'id'))
                     ->required(),
             ])->deselectRecordsAfterCompletion()
         ];
