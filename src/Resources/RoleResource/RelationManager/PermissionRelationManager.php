@@ -16,6 +16,16 @@ class PermissionRelationManager extends BelongsToManyRelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static function getModelLabel(): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.permission');
+    }
+
+    protected static function getPluralModelLabel(): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.permissions');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
