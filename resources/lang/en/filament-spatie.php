@@ -10,7 +10,7 @@ return [
     'field.guard_name' => 'Guard Name',
     'field.name' => 'Name',
     'field.permissions' => 'Permissions',
-    'field.roles' => 'roles',
+    'field.roles' => 'Roles',
 
     /*
     |--------------------------------------------------------------------------

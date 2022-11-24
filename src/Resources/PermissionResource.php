@@ -23,10 +23,12 @@ use Spatie\Permission\Models\Role;
 
 class PermissionResource extends Resource
 {
-
-    protected static ?string $model = Permission::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
+
+    public static function getModel(): string
+    {
+        return config('permission.models.permission', Permission::class);
+    }
 
     public static function getLabel(): string
     {
@@ -57,6 +59,7 @@ class PermissionResource extends Resource
                             BelongsToManyMultiSelect::make('roles')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
                                 ->relationship('roles', 'name')
+                                ->preload(config('filament-spatie-roles-permissions.preload_roles'))
                         ])
                     ])
             ]);
