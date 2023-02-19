@@ -28,19 +28,79 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
 
 ## Usage
 
+### Form
+
 You can add this to your *form* method in your UserResource 
 
 ```php
 return $form->schema([
-    ...
-    BelongsToManyMultiSelect::make('roles')->relationship('roles', 'name')
+    Select::make('roles')->multipe()->relationship('roles', 'name')
 ])
 
 ```
 
 In addition to the field added to the UserResource. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
 
-### Security
+### Generate Permissions
+
+You can generate Permissions by running
+```bash
+php artisan permission:sync
+```
+
+This will not delete any existing permissions. However, if you want to delete all existing permissions, run
+```bash
+php artisan permission:sync --clean
+```
+
+### Configurations
+
+In the **filament-spatie-roles-permissions.php** config file, you can modify the following
+
+```php
+'model_permissions' => [
+        'view-any',
+        'view',
+        'create',
+        'update',
+        'delete',
+        'restore',
+        'force-delete'
+    ],
+
+    'guard_names' => [
+        'web',
+        //'api'
+    ],
+
+    'discover_models_through_filament_resources' => true,
+
+    'model_directories' => [
+        'Models',
+        'Domains/Posts'
+    ],
+
+    /*
+     * define custom_models in snake-case
+     */
+    'custom_models' => [
+        //'roles',
+        //'permissions'
+    ],
+
+    /*
+     * define excluded_models in snake-case
+     */
+    'excluded_models' => [
+        'team',
+    ],
+
+    'custom_permissions' => [
+        //'log.view'
+    ]
+```
+
+## Security
 
 If you discover any security related issues, please create an issue.
 

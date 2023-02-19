@@ -2,6 +2,7 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions;
 
+use Althinect\FilamentSpatieRolesPermissions\Commands\Permission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use Filament\PluginServiceProvider;
@@ -17,7 +18,8 @@ class FilamentSpatieRolesPermissionsServiceProvider extends PluginServiceProvide
         $package
             ->name('filament-spatie-roles-permissions')
             ->hasConfigFile()
-            ->hasTranslations();
+            ->hasTranslations()
+            ->hasCommand(Permission::class);
     }
 
     protected function getResources(): array
