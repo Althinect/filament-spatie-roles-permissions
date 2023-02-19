@@ -7,9 +7,10 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\EditRo
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ListRoles;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ViewRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\PermissionRelationManager;
-use Filament\Forms\Components\BelongsToManyMultiSelect;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -53,7 +54,8 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                                 TextInput::make('guard_name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
-                                BelongsToManyMultiSelect::make('permissions')
+                                Select::make('permissions')
+                                    ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions'))
