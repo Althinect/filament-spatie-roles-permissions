@@ -22,12 +22,12 @@ return [
     ],
 
     /*
-     * Permissions will be generated only for the models of the respective Filament Resources
+     * Permissions will be generated only for the models associated with the respective Filament Resources
      */
     'discover_models_through_filament_resources' => false,
 
     /*
-     * If you have custom model directories include them here.
+     * If you have custom model directories, include them here.
      */
     'model_directories' => [
         'Models',

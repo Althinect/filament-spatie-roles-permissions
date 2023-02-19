@@ -6,6 +6,17 @@
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
 
+## Updating
+
+After performing a ```composer update```, run
+```php
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+
+```php
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
+```
+
 ## Installation
 
 You can install the package via composer:
@@ -30,16 +41,15 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
 
 ### Form
 
-You can add this to your *form* method in your UserResource 
+You can add the following to your *form* method in your UserResource 
 
 ```php
 return $form->schema([
     Select::make('roles')->multipe()->relationship('roles', 'name')
 ])
-
 ```
 
-In addition to the field added to the UserResource. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
+In addition to the field added to the **UserResource**. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
 
 ### Generate Permissions
 
@@ -49,8 +59,21 @@ php artisan permission:sync
 ```
 
 This will not delete any existing permissions. However, if you want to delete all existing permissions, run
+
 ```bash
 php artisan permission:sync --clean
+```
+
+#### Example: 
+If you have a **Post** model, it will generate the following permissions
+```
+post.view-any
+post.view
+post.create
+post.update
+post.delete
+post.restore
+post.force-delete
 ```
 
 ### Configurations

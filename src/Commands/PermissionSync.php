@@ -6,11 +6,11 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission as PermissionModel;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
 
-class Permission extends Command
+class PermissionSync extends Command
 {
     public array $permissions = [];
     /**
@@ -48,7 +48,7 @@ class Permission extends Command
 
         foreach ($this->permissions as $permission) {
             $this->comment("Syncing Permission for: " . $permission['name']);
-            PermissionModel::firstOrCreate($permission);
+            Permission::firstOrCreate($permission);
         }
     }
 
