@@ -19,7 +19,7 @@ class FilamentSpatieRolesPermissionsServiceProvider extends PluginServiceProvide
             ->name('filament-spatie-roles-permissions')
             ->hasConfigFile()
             ->hasTranslations()
-            ->hasCommand(PermissionSync::class);
+            ->hasCommand(Permission::class);
     }
 
     protected function getResources(): array

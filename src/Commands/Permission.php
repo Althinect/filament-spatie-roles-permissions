@@ -4,32 +4,28 @@ namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Permission as PermissionModel;
 use Illuminate\Support\Facades\DB;
 
-
-class PermissionSync extends Command
+class Permission extends Command
 {
+    public $config;
+
     public array $permissions = [];
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+
     protected $signature = 'permissions:sync {--C|clean}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Generates permissions through Models or Filament Resources and custom permissions';
 
-    /**
-     * Execute the console command.
-     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->config = config('filament-spatie-roles-permissions.generator');
+    }
+
     public function handle(): void
     {
         $customModels = $this->getCustomModels();
@@ -48,7 +44,7 @@ class PermissionSync extends Command
 
         foreach ($this->permissions as $permission) {
             $this->comment("Syncing Permission for: " . $permission['name']);
-            Permission::firstOrCreate($permission);
+            PermissionModel::firstOrCreate($permission);
         }
     }
 
@@ -76,10 +72,10 @@ class PermissionSync extends Command
         }
     }
 
-    public function prepareCustomPermissions()
+    public function prepareCustomPermissions(): void
     {
         foreach ($this->getCustomPermissions() as $customPermission) {
-            foreach($this->guardNames() as $guardName){
+            foreach ($this->guardNames() as $guardName) {
                 $this->permissions[] = [
                     'name' => $customPermission,
                     'guard_name' => $guardName
@@ -93,7 +89,7 @@ class PermissionSync extends Command
     {
         $models = [];
 
-        if (config('filament-spatie-roles-permissions.discover_models_through_filament_resources')) {
+        if ($this->config['discover_models_through_filament_resources']) {
             $resources = File::files(app_path('../app/Filament/Resources'));
 
             foreach ($resources as $resource) {
@@ -103,14 +99,14 @@ class PermissionSync extends Command
             return $models;
         }
 
-        foreach (config('filament-spatie-roles-permissions.model_directories') as $modelDirectory) {
+        foreach ($this->config['model_directories'] as $modelDirectory) {
             $models = array_merge($models, $this->getClassesInDirectory($modelDirectory));
         }
 
         return $models;
     }
 
-    private function getClassesInDirectory($path)
+    private function getClassesInDirectory($path): array
     {
         $modelsPath = app_path($path);
         $files = File::files($modelsPath);
@@ -124,26 +120,26 @@ class PermissionSync extends Command
 
     private function modelPermissions(): array
     {
-        return config('filament-spatie-roles-permissions.model_permissions') ?? [];
+        return $this->config['model_permissions'];
     }
 
     private function guardNames(): array
     {
-        return config('filament-spatie-roles-permissions.guard_names') ?? [];
+        return $this->config['guard_names'];
     }
 
     private function getCustomModels(): array
     {
-        return config('filament-spatie-roles-permissions.custom_models') ?? [];
+        return $this->config['custom_models'];
     }
 
     private function getCustomPermissions(): array
     {
-        return config('filament-spatie-roles-permissions.custom_permissions') ?? [];
+        return $this->config['custom_permissions'];
     }
 
     private function getExcludedModels(): array
     {
-        return config('filament-spatie-roles-permissions.excluded_models') ?? [];
+        return $this->config['excluded_models'];
     }
 }
