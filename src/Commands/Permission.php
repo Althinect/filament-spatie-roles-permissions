@@ -4,6 +4,7 @@ namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -53,8 +54,12 @@ class Permission extends Command
         if ($this->option('clean')) {
             $this->confirm('This will delete existing permissions. Do you want to continue?', false);
             $this->comment('Deleting Permissions');
-            DB::table(config('permission.table_names.permissions'))->delete();
-            $this->comment('Deleted Permissions');
+            try {
+                DB::table(config('permission.table_names.permissions'))->delete();
+                $this->comment('Deleted Permissions');
+            } catch (\Exception $exception) {
+                $this->warn($exception->getMessage());
+            }
         }
     }
 
