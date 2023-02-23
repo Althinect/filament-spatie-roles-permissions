@@ -24,12 +24,22 @@ return [
         ],
 
         /*
-         * Permissions will be generated only for the models associated with the respective Filament Resources
+         * returns the "name" for the permission.
+         * $permission which is an iteration of [model_permissions] ('view-any','view','create','update','delete','restore','force-delete'),
+         * $model The model to which the $permission will be interpolated
+         *
+         * Eg: 'return Str::ucfirst($model) .\' \'. $permission;'
+         * 
          */
-        'discover_models_through_filament_resources' => true,
+        'permission_name' => 'return $permission. \' \' .$model;',
 
         /*
-         * If you have custom model directories, include them here.
+         * Permissions will be generated ONLY for the models associated with the respective Filament Resources
+         */
+        'discover_models_through_filament_resources' => false,
+
+        /*
+         * Include custom model directories here.
          */
         'model_directories' => [
             'Models',

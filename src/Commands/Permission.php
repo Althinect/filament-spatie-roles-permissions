@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class Permission extends Command
 {
-    public $config;
+    private $config;
 
-    public array $permissions = [];
+    private array $permissions = [];
 
     protected $signature = 'permissions:sync {--C|clean}';
 
@@ -60,11 +60,11 @@ class Permission extends Command
 
     public function prepareClassPermissions($classes): void
     {
-        foreach ($classes as $class) {
-            foreach ($this->modelPermissions() as $modelPermission) {
+        foreach ($classes as $model) {
+            foreach ($this->modelPermissions() as $permission) {
                 foreach ($this->guardNames() as $guardName) {
                     $this->permissions[] = [
-                        'name' => $class . '.' . $modelPermission,
+                        'name' => eval($this->config['permission_name']),
                         'guard_name' => $guardName
                     ];
                 }
