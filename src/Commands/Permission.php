@@ -2,7 +2,10 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
+use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\ManipulateFiles;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -17,7 +20,12 @@ class Permission extends Command
 
     private array $permissions = [];
 
-    protected $signature = 'permissions:sync {--C|clean}';
+    private array $policies = [];
+
+    protected $signature = 'permissions:sync 
+                                {--C|clean} 
+                                {--P|policies}
+                                {--Y|yes-to-all}';
 
     protected $description = 'Generates permissions through Models or Filament Resources and custom permissions';
 
@@ -39,7 +47,7 @@ class Permission extends Command
 
         $this->deleteExistingPermissions();
 
-        $this->prepareClassPermissions($classes);
+        $this->prepareClassPermissionsAndPolicies($classes);
 
         $this->prepareCustomPermissions();
 
@@ -52,27 +60,76 @@ class Permission extends Command
     public function deleteExistingPermissions(): void
     {
         if ($this->option('clean')) {
-            $this->confirm('This will delete existing permissions. Do you want to continue?', false);
-            $this->comment('Deleting Permissions');
-            try {
-                DB::table(config('permission.table_names.permissions'))->delete();
-                $this->comment('Deleted Permissions');
-            } catch (\Exception $exception) {
-                $this->warn($exception->getMessage());
+            if ($this->option('yes-to-all') || $this->confirm('This will delete existing permissions. Do you want to continue?', false)) {
+                $this->comment('Deleting Permissions');
+                try {
+                    DB::table(config('permission.table_names.permissions'))->delete();
+                    $this->comment('Deleted Permissions');
+                } catch (\Exception $exception) {
+                    $this->warn($exception->getMessage());
+                }
             }
         }
     }
 
-    public function prepareClassPermissions($classes): void
+    public function prepareClassPermissionsAndPolicies($classes): void
     {
+        $filesystem = new Filesystem();
+
+        $createPolicies = false;
+
+        if ($this->option('policies')) {
+            if (
+                $this->option('yes-to-all') ||
+                $this->confirm('This will override existing policy classes with the same name. Do you want to continue?', false)
+            ) {
+                $createPolicies = true;
+            }
+        }
+
         foreach ($classes as $model) {
-            foreach ($this->modelPermissions() as $permission) {
+            $modelName = $model->getShortName();
+
+            $stub = '/stubs/genericPolicy.stub';
+            $contents = $filesystem->get(__DIR__ . $stub);
+
+            foreach ($this->permissionAffixes() as $key => $permissionAffix) {
                 foreach ($this->guardNames() as $guardName) {
+
+                    $permission = call_user_func($this->config['permission_name'], $permissionAffix, $modelName);
                     $this->permissions[] = [
-                        'name' => eval($this->config['permission_name']),
+                        'name' => $permission,
                         'guard_name' => $guardName
                     ];
+
+                    if ($this->option('policies')) {
+                        $contents = Str::replace("{{ " . $key . " }}", $permission, $contents);
+                    }
                 }
+            }
+
+            if (($this->option('policies') && $createPolicies) || $this->option('yes-to-all')) {
+
+                $policyVariables = [
+                    'class' => $modelName . 'Policy',
+                    'namespacedModel' => $model->getName(),
+                    'namespacedUserModel' => (new \ReflectionClass($this->config['user_model']))->getName(),
+                    'namespace' => $this->config['policies_namespace'],
+                    'user' => 'User',
+                    'model' => $modelName,
+                    'modelVariable' => $modelName == 'User' ? 'model' : Str::lower($modelName)
+                ];
+
+                foreach ($policyVariables as $search => $replace) {
+                    if ($modelName == 'User' && $search == 'namespacedModel') {
+                        $contents = Str::replace("use {{ namespacedModel }};", '', $contents);
+                    } else {
+                        $contents = Str::replace("{{ " . $search . " }}", $replace, $contents);
+                    }
+                }
+
+                $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
+                $this->comment('Creating Policy: ' . $modelName);
             }
         }
     }
@@ -86,7 +143,6 @@ class Permission extends Command
                     'guard_name' => $guardName
                 ];
             }
-
         }
     }
 
@@ -99,33 +155,36 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceClass = $resource->getFilenameWithoutExtension();
-                $models[] = Str::snake(class_basename(app('App\Filament\Resources\\' . $resourceClass)->getModel()));
+                $models[] = class_basename(app('App\Filament\Resources\\' . $resourceClass)->getModel());
             }
+
             return $models;
         }
 
-        foreach ($this->config['model_directories'] as $modelDirectory) {
-            $models = array_merge($models, $this->getClassesInDirectory($modelDirectory));
+        foreach ($this->config['model_directories'] as $modelDirectory => $modelNamespace) {
+            $models = array_merge($models, $this->getClassesInDirectory($modelDirectory, $modelNamespace));
         }
 
         return $models;
     }
 
-    private function getClassesInDirectory($path): array
+    private function getClassesInDirectory($path, $namespace): array
     {
-        $modelsPath = app_path($path);
-        $files = File::files($modelsPath);
+        $files = File::files($path);
         $models = [];
+
         foreach ($files as $file) {
-            $models[] = Str::snake($file->getFilenameWithoutExtension());
+            $class = new ($namespace . '\\' . $file->getFilenameWithoutExtension());
+            $model = new \ReflectionClass($class);
+            $models[] = $model;
         }
 
         return $models;
     }
 
-    private function modelPermissions(): array
+    private function permissionAffixes(): array
     {
-        return $this->config['model_permissions'];
+        return $this->config['permission_affixes'];
     }
 
     private function guardNames(): array
@@ -135,7 +194,7 @@ class Permission extends Command
 
     private function getCustomModels(): array
     {
-        return $this->config['custom_models'];
+        return $this->getClassNames($this->config['custom_models']);
     }
 
     private function getCustomPermissions(): array
@@ -145,6 +204,13 @@ class Permission extends Command
 
     private function getExcludedModels(): array
     {
-        return $this->config['excluded_models'];
+        return $this->getClassNames($this->config['excluded_models']);
+    }
+
+    private function getClassNames($array): array
+    {
+        return array_map(function ($classes) {
+            return class_basename($classes);
+        }, $array);
     }
 }
