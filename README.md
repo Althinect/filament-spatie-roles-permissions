@@ -89,7 +89,7 @@ You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all``
 ***Recommended only for new projects as it will replace Policy files***
 
 ```bash
-php artisan permission:sync --CPY
+php artisan permission:sync -CPY
 ```
 
 ### Adding a Super Admin
