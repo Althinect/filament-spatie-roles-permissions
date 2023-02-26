@@ -61,7 +61,7 @@ php artisan permission:sync
 This will not delete any existing permissions. However, if you want to delete all existing permissions, run
 
 ```bash
-php artisan permission:sync --clean
+php artisan permission:sync -C|--clean
 ```
 
 #### Example: 
@@ -76,64 +76,47 @@ post.restore
 post.force-delete
 ```
 
-### Configurations
+### Generating Policies
+Policies will be generated with the respective permission
 
-In the **filament-spatie-roles-permissions.php** config file, you can modify the following
+```bash
+php artisan permission:sync -P|--policies
+```
+
+### Ignoring prompts
+You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
+
+***Recommended only for new projects as it will replace Policy files***
+
+```bash
+php artisan permission:sync --CPY
+```
+
+### Adding a Super Admin
+
+* Create a Role with the name `Super Admin` and assign the role to a User
+* Add the following trait to the User Model
 
 ```php
-'generator' => [
+use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\HasSuperAdmin;
 
-        'guard_names' => [
-            'web',
-            //'api'
-        ],
+class User extends Authenticatable{
 
-        'model_permissions' => [
-            'view-any',
-            'view',
-            'create',
-            'update',
-            'delete',
-            'restore',
-            'force-delete'
-        ],
-
-        /*
-         * Permissions will be generated only for the models associated with the respective Filament Resources
-         */
-        'discover_models_through_filament_resources' => true,
-
-        /*
-         * If you have custom model directories, include them here.
-         */
-        'model_directories' => [
-            'Models',
-            //'Domains/Posts/Models'
-        ],
-
-        /*
-         * Define custom_models in snake-case
-         */
-        'custom_models' => [
-            //'roles',
-            //'permissions'
-        ],
-
-        /*
-         * Define excluded_models in snake-case
-         */
-        'excluded_models' => [
-            'team',
-        ],
-
-        /*
-         * Define any other permission here
-         */
-        'custom_permissions' => [
-            //'log.view'
-        ]
-    ]
+...
+use HasSuperAdmin;
 ```
+
+* In the `boot` method of the `AuthServiceProvider` add the following
+
+```php
+Gate::before(function (User $user, string $ability) {
+    return $user->isSuperAdmin();     
+});
+```
+
+### Configurations
+
+In the **filament-spatie-roles-permissions.php** config file, you can customize the permission generation
 
 ## Security
 
