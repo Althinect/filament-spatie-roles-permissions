@@ -6,6 +6,17 @@
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
 
+## Updating
+
+After performing a ```composer update```, run
+```php
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+
+```php
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
+```
+
 ## Installation
 
 You can install the package via composer:
@@ -28,19 +39,86 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
 
 ## Usage
 
-You can add this to your *form* method in your UserResource 
+### Form
+
+You can add the following to your *form* method in your UserResource 
 
 ```php
 return $form->schema([
-    ...
-    BelongsToManyMultiSelect::make('roles')->relationship('roles', 'name')
+    Select::make('roles')->multipe()->relationship('roles', 'name')
 ])
-
 ```
 
-In addition to the field added to the UserResource. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
+In addition to the field added to the **UserResource**. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
 
-### Security
+### Generate Permissions
+
+You can generate Permissions by running
+```bash
+php artisan permission:sync
+```
+
+This will not delete any existing permissions. However, if you want to delete all existing permissions, run
+
+```bash
+php artisan permission:sync -C|--clean
+```
+
+#### Example: 
+If you have a **Post** model, it will generate the following permissions
+```
+post.view-any
+post.view
+post.create
+post.update
+post.delete
+post.restore
+post.force-delete
+```
+
+### Generating Policies
+Policies will be generated with the respective permission
+
+```bash
+php artisan permission:sync -P|--policies
+```
+
+### Ignoring prompts
+You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
+
+***Recommended only for new projects as it will replace Policy files***
+
+```bash
+php artisan permission:sync -CPY
+```
+
+### Adding a Super Admin
+
+* Create a Role with the name `Super Admin` and assign the role to a User
+* Add the following trait to the User Model
+
+```php
+use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\HasSuperAdmin;
+
+class User extends Authenticatable{
+
+...
+use HasSuperAdmin;
+```
+
+* In the `boot` method of the `AuthServiceProvider` add the following
+
+```php
+Gate::before(function (User $user, string $ability) {
+    return $user->isSuperAdmin();     
+});
+```
+
+### Configurations
+
+In the **filament-spatie-roles-permissions.php** config file, you can customize the permission generation
+
+## Security
 
 If you discover any security related issues, please create an issue.
 
