@@ -52,13 +52,13 @@ In addition to the field added to the **UserResource**. There will be 2 Resource
 
 You can generate Permissions by running
 ```bash
-php artisan permission:sync
+php artisan permissions:sync
 ```
 
 This will not delete any existing permissions. However, if you want to delete all existing permissions, run
 
 ```bash
-php artisan permission:sync -C|--clean
+php artisan permissions:sync -C|--clean
 ```
 
 #### Example: 
@@ -77,7 +77,7 @@ post.force-delete
 Policies will be generated with the respective permission
 
 ```bash
-php artisan permission:sync -P|--policies
+php artisan permissions:sync -P|--policies
 ```
 
 ### Ignoring prompts
@@ -86,7 +86,7 @@ You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all``
 ***Recommended only for new projects as it will replace Policy files***
 
 ```bash
-php artisan permission:sync -CPY
+php artisan permissions:sync -CPY
 ```
 
 ### Adding a Super Admin
