@@ -9,9 +9,6 @@ This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/lara
 ## Updating
 
 After performing a ```composer update```, run
-```php
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-```
 
 ```php
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
