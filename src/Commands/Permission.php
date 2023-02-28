@@ -96,7 +96,7 @@ class Permission extends Command
             foreach ($this->permissionAffixes() as $key => $permissionAffix) {
                 foreach ($this->guardNames() as $guardName) {
 
-                    $permission = call_user_func($this->config['permission_name'], $permissionAffix, $modelName);
+                    $permission = eval($this->config['permission_name']);
                     $this->permissions[] = [
                         'name' => $permission,
                         'guard_name' => $guardName
