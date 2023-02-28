@@ -40,11 +40,11 @@ return [
          * $permission which is an iteration of [permission_affixes] ,
          * $model The model to which the $permission will be concatenated
          *
-         * Eg: 'permission_name' => fn($permissionAffix, $model) => $permissionAffix . ' ' . Str::kebab($model),
+         * Eg: 'permission_name' => 'return $permissionAffix . ' ' . Str::kebab($modelName),
          *
          * Note: If you are changing the "permission_name" , It's recommended to run with --clean to avoid duplications
          */
-        'permission_name' => fn($permissionAffix, $model) => $permissionAffix . ' ' . $model,
+        'permission_name' => 'return $permissionAffix . \' \' . $modelName;',
 
         /*
          * Permissions will be generated ONLY for the models associated with the respective Filament Resources
