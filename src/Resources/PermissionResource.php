@@ -36,7 +36,7 @@ class PermissionResource extends Resource
 
     protected static function getNavigationGroup(): ?string
     {
-        return __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
+        return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
 
     public static function getPluralLabel(): string
@@ -54,7 +54,12 @@ class PermissionResource extends Resource
                             TextInput::make('name')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                             TextInput::make('guard_name')
-                                ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                                ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                                ->datalist(config('filament-spatie-roles-permissions.generator.guard_names'))
+                                ->default(
+                                    count(config('filament-spatie-roles-permissions.generator.guard_names')) === 1 ?
+                                    config('filament-spatie-roles-permissions.generator.guard_names') : ''
+                                ),
                             Select::make('roles')
                                 ->multiple()
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
