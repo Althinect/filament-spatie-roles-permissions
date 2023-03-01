@@ -5,6 +5,8 @@ return [
     'preload_roles' => false,
 
     'preload_permissions' => false,
+    
+    'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
 
     'generator' => [
 
