@@ -53,7 +53,12 @@ class RoleResource extends Resource
                                 TextInput::make('name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                                 TextInput::make('guard_name')
-                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                                    ->datalist(config('filament-spatie-roles-permissions.generator.guard_names'))
+                                    ->default(
+                                        count(config('filament-spatie-roles-permissions.generator.guard_names')) === 1 ?
+                                            config('filament-spatie-roles-permissions.generator.guard_names') : ''
+                                    ),
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
