@@ -49,7 +49,7 @@ return [
         'permission_name' => 'return $permissionAffix . \' \' . $modelName;',
 
         /*
-         * Permissions will be generated ONLY for the models associated with the respective Filament Resources
+         * Permissions will be generated for the models associated with the respective Filament Resources
          */
         'discover_models_through_filament_resources' => false,
 
