@@ -194,7 +194,7 @@ class Permission extends Command
 
     private function getCustomModels(): array
     {
-        return $this->getClassNames($this->config['custom_models']);
+        return $this->getModelReflections($this->config['custom_models']);
     }
 
     private function getCustomPermissions(): array
@@ -204,13 +204,13 @@ class Permission extends Command
 
     private function getExcludedModels(): array
     {
-        return $this->getClassNames($this->config['excluded_models']);
+        return $this->getModelReflections($this->config['excluded_models']);
     }
 
-    private function getClassNames($array): array
+    private function getModelReflections($array): array
     {
         return array_map(function ($classes) {
-            return class_basename($classes);
+            return new \ReflectionClass($classes);
         }, $array);
     }
 }
