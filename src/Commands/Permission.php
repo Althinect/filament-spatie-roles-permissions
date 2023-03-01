@@ -3,6 +3,7 @@
 namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
 use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\ManipulateFiles;
+use Filament\Facades\Filament;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
@@ -151,29 +152,31 @@ class Permission extends Command
         $models = [];
 
         if ($this->config['discover_models_through_filament_resources']) {
-            $resources = File::files(app_path('../app/Filament/Resources'));
+            $resources = File::allFiles(app_path('Filament/Resources'));
 
             foreach ($resources as $resource) {
-                $resourceClass = $resource->getFilenameWithoutExtension();
-                $models[] = class_basename(app('App\Filament\Resources\\' . $resourceClass)->getModel());
+                $resourceNameSpace = $this->extractNamespace($resource);
+                $reflection = new \ReflectionClass($resourceNameSpace. '\\' . $resource->getFilenameWithoutExtension());
+                if($reflection->getParentClass()->getName() == 'Filament\Resources\Resource'){
+                    $models[] = new \ReflectionClass(app($resourceNameSpace. '\\' . $resource->getFilenameWithoutExtension())->getModel());
+                }
             }
-
-            return $models;
         }
 
-        foreach ($this->config['model_directories'] as $modelDirectory => $modelNamespace) {
-            $models = array_merge($models, $this->getClassesInDirectory($modelDirectory, $modelNamespace));
+        foreach ($this->config['model_directories'] as $modelDirectory) {
+            $models = array_merge($models, $this->getClassesInDirectory($modelDirectory));
         }
 
         return $models;
     }
 
-    private function getClassesInDirectory($path, $namespace): array
+    private function getClassesInDirectory($path): array
     {
         $files = File::files($path);
         $models = [];
 
         foreach ($files as $file) {
+            $namespace = $this->extractNamespace($file);
             $class = new ($namespace . '\\' . $file->getFilenameWithoutExtension());
             $model = new \ReflectionClass($class);
             $models[] = $model;
@@ -212,5 +215,21 @@ class Permission extends Command
         return array_map(function ($classes) {
             return new \ReflectionClass($classes);
         }, $array);
+    }
+
+    private function extractNamespace($file) {
+        $ns = NULL;
+        $handle = fopen($file, "r");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                if (strpos($line, 'namespace') === 0) {
+                    $parts = explode(' ', $line);
+                    $ns = rtrim(trim($parts[1]), ';');
+                    break;
+                }
+            }
+            fclose($handle);
+        }
+        return $ns;
     }
 }
