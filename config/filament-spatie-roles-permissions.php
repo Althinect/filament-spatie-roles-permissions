@@ -55,18 +55,15 @@ return [
          * Include directories which consists of models.
          */
         'model_directories' => [
-            /*
-             * path => namespace
-             */
-            app_path('Models') => 'App\Models'
-            //app_path('Domains/Forum') => 'Domains\Forum\Models'
+            app_path('Models')
+            //app_path('Domains/Forum')
         ],
 
         /*
          * Define custom_models in snake-case
          */
         'custom_models' => [
-
+            //
         ],
 
         /*
