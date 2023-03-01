@@ -155,10 +155,8 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceClass = $resource->getFilenameWithoutExtension();
-                $models[] = class_basename(app('App\Filament\Resources\\' . $resourceClass)->getModel());
+                $models[] = new \ReflectionClass(app('App\Filament\Resources\\' . $resourceClass)->getModel());
             }
-
-            return $models;
         }
 
         foreach ($this->config['model_directories'] as $modelDirectory => $modelNamespace) {
