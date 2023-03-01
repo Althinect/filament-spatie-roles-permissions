@@ -36,7 +36,7 @@ class PermissionResource extends Resource
 
     protected static function getNavigationGroup(): ?string
     {
-        return __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
+        return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
 
     public static function getPluralLabel(): string
