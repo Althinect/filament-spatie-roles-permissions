@@ -54,16 +54,19 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                                 TextInput::make('guard_name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
-                                    ->datalist(config('filament-spatie-roles-permissions.generator.guard_names'))
-                                    ->default(
-                                        count(config('filament-spatie-roles-permissions.generator.guard_names')) === 1 ?
-                                            config('filament-spatie-roles-permissions.generator.guard_names') : ''
-                                    ),
+                                    ->datalist(config('filament-spatie-roles-permissions.generator.guard_names')),
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
-                                    ->preload(config('filament-spatie-roles-permissions.preload_permissions'))
+                                    ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
+                                Select::make(config('permission.team_foreign_key', 'team_id'))->label(__('filament-spatie-roles-permissions::team'))
+                                    ->hidden(!config('permission.teams', false))
+                                    ->options(
+                                        fn() => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
+                                    )
+                                    ->placeholder(__('filament-spatie-roles-permissions::select-team'))
+                                    ->hint(__('filament-spatie-roles-permissions::select-team-hint')),
                             ])
                     ])
             ]);

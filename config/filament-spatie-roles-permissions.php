@@ -7,6 +7,8 @@ return [
     'preload_permissions' => false,
     
     'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
+    
+    'team_model' => \App\Models\Team::class,
 
     'generator' => [
 
