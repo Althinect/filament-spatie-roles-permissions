@@ -5,6 +5,11 @@
 ![GitHub Actions](https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg)
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
+Provides Resources for Roles and Permissions
+Permission and Policy generations
+- check the ``config/filament-spatie-roles-permissions-config.php``
+Supports permissions for teams - make sure the config
+- make sure the ``teams`` attribute in the ``app/permission.php`` file is set to true
 
 ## Updating
 
@@ -95,7 +100,7 @@ php artisan permissions:sync -CPY
 * Add the following trait to the User Model
 
 ```php
-use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\HasSuperAdmin;
+use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
 
 class User extends Authenticatable{
 
