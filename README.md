@@ -50,7 +50,7 @@ You can add the following to your *form* method in your UserResource
 
 ```php
 return $form->schema([
-    Select::make('roles')->multipe()->relationship('roles', 'name')
+    Select::make('roles')->multiple()->relationship('roles', 'name')
 ])
 ```
 
