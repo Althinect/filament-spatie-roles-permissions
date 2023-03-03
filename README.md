@@ -5,7 +5,9 @@
 ![GitHub Actions](https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg)
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
+
 Provides Resources for Roles and Permissions
+
 Permission and Policy generations
 - check the ``config/filament-spatie-roles-permissions-config.php``
 
