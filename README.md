@@ -72,13 +72,15 @@ php artisan permissions:sync -C|--clean
 #### Example: 
 If you have a **Post** model, it will generate the following permissions
 ```
-post.view-any
-post.view
-post.create
-post.update
-post.delete
-post.restore
-post.force-delete
+view-any Post
+view Post
+create Post
+update Post
+delete Post
+restore Post
+force-delete Post
+replicate Post
+reorder Post
 ```
 
 ### Generating Policies
