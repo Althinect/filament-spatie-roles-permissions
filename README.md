@@ -9,10 +9,10 @@ This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/lara
 Provides Resources for Roles and Permissions
 
 Permission and Policy generations
-- check the ``config/filament-spatie-roles-permissions-config.php``
+- Check the ``config/filament-spatie-roles-permissions-config.php``
 
-Supports permissions for teams - make sure the config
-- make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
+Supports permissions for teams
+- Make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
 
 ## Updating
 
