@@ -60,13 +60,13 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
-                                Select::make(config('permission.team_foreign_key', 'team_id'))->label(__('filament-spatie-roles-permissions::team'))
+                                Select::make(config('permission.team_foreign_key', 'team_id'))->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
                                     ->hidden(!config('permission.teams', false))
                                     ->options(
                                         fn() => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
                                     )
-                                    ->placeholder(__('filament-spatie-roles-permissions::select-team'))
-                                    ->hint(__('filament-spatie-roles-permissions::select-team-hint')),
+                                    ->placeholder(__('filament-spatie-roles-permissions::filament-spatie.select-team'))
+                                    ->hint(__('filament-spatie-roles-permissions::filament-spatie.select-team-hint')),
                             ])
                     ])
             ]);
@@ -94,7 +94,7 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PermissionRelationManager::class
+            PermissionRelationManager::class,
         ];
     }
 

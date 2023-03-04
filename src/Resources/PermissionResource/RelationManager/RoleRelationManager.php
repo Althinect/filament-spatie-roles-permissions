@@ -48,7 +48,6 @@ class RoleRelationManager extends BelongsToManyRelationManager
                 TextColumn::make('guard_name')
                     ->searchable()
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
-
             ])
             ->filters([
                 //
