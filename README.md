@@ -118,7 +118,7 @@ use HasSuperAdmin;
 
 ```php
 Gate::before(function (User $user, string $ability) {
-    return $user->isSuperAdmin();     
+    return $user->isSuperAdmin() ? true: null;     
 });
 ```
 
@@ -134,6 +134,7 @@ If you discover any security related issues, please create an issue.
 
 -   [Tharinda Rodrigo](https://github.com/UdamLiyanage/)
 -   [Udam Liyanage](https://github.com/UdamLiyanage/)
+-   [Contributors](https://github.com/Althinect/filament-spatie-roles-permissions/graphs/contributors)
 
 ## License
 
