@@ -10,6 +10,14 @@ return [
     
     'team_model' => \App\Models\Team::class,
 
+    /*
+     * Set to false to remove from navigation
+     */
+    'should_register_on_navigation' => [
+        'permissions' => true,
+        'roles' => true
+    ],
+
     'generator' => [
 
         'guard_names' => [

@@ -22,6 +22,10 @@ class RoleResource extends Resource
 {
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return config('filament-spatie-roles-permissions.should_register_on_navigation.roles', true);
+    }
     public static function getModel(): string
     {
         return config('permission.models.role', Role::class);

@@ -24,9 +24,14 @@ class PermissionResource extends Resource
 {
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return config('filament-spatie-roles-permissions.should_register_on_navigation.permissions', true);
+    }
+
     public static function getModel(): string
     {
-        return config('permission.models.permission', Permission::class);
+        return config('filament-spatie-roles-permissions::models.permission', Permission::class);
     }
 
     public static function getLabel(): string
