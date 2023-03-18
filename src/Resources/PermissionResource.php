@@ -31,7 +31,7 @@ class PermissionResource extends Resource
 
     public static function getModel(): string
     {
-        return config('filament-spatie-roles-permissions::models.permission', Permission::class);
+        return config('permissions.models.permission', Permission::class);
     }
 
     public static function getLabel(): string
