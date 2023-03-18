@@ -22,6 +22,10 @@ class RoleResource extends Resource
 {
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return config('filament-spatie-roles-permissions.should_register_on_navigation.roles', true);
+    }
     public static function getModel(): string
     {
         return config('permission.models.role', Role::class);
@@ -34,7 +38,7 @@ class RoleResource extends Resource
 
     protected static function getNavigationGroup(): ?string
     {
-        return __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
+        return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
 
     public static function getPluralLabel(): string
@@ -53,12 +57,20 @@ class RoleResource extends Resource
                                 TextInput::make('name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                                 TextInput::make('guard_name')
-                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                                    ->datalist(config('filament-spatie-roles-permissions.generator.guard_names')),
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
-                                    ->preload(config('filament-spatie-roles-permissions.preload_permissions'))
+                                    ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
+                                Select::make(config('permission.team_foreign_key', 'team_id'))->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
+                                    ->hidden(!config('permission.teams', false))
+                                    ->options(
+                                        fn() => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
+                                    )
+                                    ->placeholder(__('filament-spatie-roles-permissions::filament-spatie.select-team'))
+                                    ->hint(__('filament-spatie-roles-permissions::filament-spatie.select-team-hint')),
                             ])
                     ])
             ]);
@@ -86,7 +98,7 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PermissionRelationManager::class
+            PermissionRelationManager::class,
         ];
     }
 

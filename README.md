@@ -6,13 +6,22 @@
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
 
+Provides Resources for Roles and Permissions
+
+Permission and Policy generations
+- Check the ``config/filament-spatie-roles-permissions-config.php``
+
+Supports permissions for teams
+- Make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
+
 ## Updating
 
 After performing a ```composer update```, run
 
 ```php
-php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
 ```
+***Note that your existing settings will be overriden***
 
 ## Installation
 
@@ -29,9 +38,10 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 
 Now you should add any other configurations needed for the Spatie-Permission package.
 
+**Note:** This will override your existing config file.
 You can publish the config file of the package with:
 ```bash
-php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
 ```
 
 ## Usage
@@ -42,7 +52,7 @@ You can add the following to your *form* method in your UserResource
 
 ```php
 return $form->schema([
-    Select::make('roles')->multipe()->relationship('roles', 'name')
+    Select::make('roles')->multiple()->relationship('roles', 'name')
 ])
 ```
 
@@ -64,13 +74,15 @@ php artisan permissions:sync -C|--clean
 #### Example: 
 If you have a **Post** model, it will generate the following permissions
 ```
-post.view-any
-post.view
-post.create
-post.update
-post.delete
-post.restore
-post.force-delete
+view-any Post
+view Post
+create Post
+update Post
+delete Post
+restore Post
+force-delete Post
+replicate Post
+reorder Post
 ```
 
 ### Generating Policies
@@ -95,7 +107,7 @@ php artisan permissions:sync -CPY
 * Add the following trait to the User Model
 
 ```php
-use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\HasSuperAdmin;
+use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
 
 class User extends Authenticatable{
 
@@ -107,7 +119,7 @@ use HasSuperAdmin;
 
 ```php
 Gate::before(function (User $user, string $ability) {
-    return $user->isSuperAdmin();     
+    return $user->isSuperAdmin() ? true: null;     
 });
 ```
 
@@ -123,6 +135,7 @@ If you discover any security related issues, please create an issue.
 
 -   [Tharinda Rodrigo](https://github.com/UdamLiyanage/)
 -   [Udam Liyanage](https://github.com/UdamLiyanage/)
+-   [Contributors](https://github.com/Althinect/filament-spatie-roles-permissions/graphs/contributors)
 
 ## License
 

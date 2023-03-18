@@ -5,6 +5,18 @@ return [
     'preload_roles' => false,
 
     'preload_permissions' => false,
+    
+    'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
+    
+    'team_model' => \App\Models\Team::class,
+
+    /*
+     * Set to false to remove from navigation
+     */
+    'should_register_on_navigation' => [
+        'permissions' => true,
+        'roles' => true
+    ],
 
     'generator' => [
 
@@ -47,7 +59,7 @@ return [
         'permission_name' => 'return $permissionAffix . \' \' . $modelName;',
 
         /*
-         * Permissions will be generated ONLY for the models associated with the respective Filament Resources
+         * Permissions will be generated for the models associated with the respective Filament Resources
          */
         'discover_models_through_filament_resources' => false,
 
@@ -55,18 +67,15 @@ return [
          * Include directories which consists of models.
          */
         'model_directories' => [
-            /*
-             * path => namespace
-             */
-            app_path('Models') => 'App\Models'
-            //app_path('Domains/Forum') => 'Domains\Forum\Models'
+            app_path('Models')
+            //app_path('Domains/Forum')
         ],
 
         /*
          * Define custom_models in snake-case
          */
         'custom_models' => [
-
+            //
         ],
 
         /*
