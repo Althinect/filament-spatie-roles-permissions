@@ -26,7 +26,6 @@ class Permission extends Command
     protected $signature = 'permissions:sync 
                                 {--C|clean} 
                                 {--P|policies}
-                                {--O|oep}
                                 {--Y|yes-to-all}';
 
     protected $description = 'Generates permissions through Models or Filament Resources and custom permissions';
@@ -78,6 +77,17 @@ class Permission extends Command
     {
         $filesystem = new Filesystem();
 
+        $createPolicies = false;
+
+        if ($this->option('policies')) {
+            if (
+                $this->option('yes-to-all') ||
+                $this->confirm('This will override existing policy classes with the same name. Do you want to continue?', false)
+            ) {
+                $createPolicies = true;
+            }
+        }
+
         foreach ($classes as $model) {
             $modelName = $model->getShortName();
 
@@ -99,7 +109,7 @@ class Permission extends Command
                 }
             }
 
-            if ($this->option('policies') || $this->option('yes-to-all')) {
+            if (($this->option('policies') && $createPolicies) || $this->option('yes-to-all')) {
 
                 $policyVariables = [
                     'class' => $modelName . 'Policy',
@@ -119,17 +129,8 @@ class Permission extends Command
                     }
                 }
 
-                if ($filesystem->exists(app_path('Policies/' . $modelName . 'Policy.php'))) {
-                    if ($this->option('oep')) {
-                        $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
-                        $this->comment('Overriding Existing Policy: ' . $modelName);
-                    } else {
-                        $this->warn('Policy already exists for: ' . $modelName);
-                    }
-                } else {
-                    $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
-                    $this->comment('Creating Policy: ' . $modelName);
-                }
+                $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
+                $this->comment('Creating Policy: ' . $modelName);
             }
         }
     }
@@ -155,9 +156,9 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceNameSpace = $this->extractNamespace($resource);
-                $reflection = new \ReflectionClass($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension());
-                if ($reflection->getParentClass()->getName() == 'Filament\Resources\Resource') {
-                    $models[] = new \ReflectionClass(app($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension())->getModel());
+                $reflection = new \ReflectionClass($resourceNameSpace. '\\' . $resource->getFilenameWithoutExtension());
+                if($reflection->getParentClass()->getName() == 'Filament\Resources\Resource'){
+                    $models[] = new \ReflectionClass(app($resourceNameSpace. '\\' . $resource->getFilenameWithoutExtension())->getModel());
                 }
             }
         }
@@ -216,8 +217,7 @@ class Permission extends Command
         }, $array);
     }
 
-    private function extractNamespace($file)
-    {
+    private function extractNamespace($file) {
         $ns = NULL;
         $handle = fopen($file, "r");
         if ($handle) {
