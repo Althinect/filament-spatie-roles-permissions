@@ -19,7 +19,6 @@ Supports permissions for teams
 ## Updating
 
 After performing a ```composer update```, run
-**Note:** This will override your existing config file.
 
 ```php
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
