@@ -14,6 +14,8 @@ Permission and Policy generations
 Supports permissions for teams
 - Make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
 
+***Don't forget to Star the repo if you like our work***
+
 ## Updating
 
 After performing a ```composer update```, run
