@@ -14,8 +14,6 @@ Permission and Policy generations
 Supports permissions for teams
 - Make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
 
-***Don't forget to Star the repo if you like our work***
-
 ## Updating
 
 After performing a ```composer update```, run
@@ -40,9 +38,10 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 
 Now you should add any other configurations needed for the Spatie-Permission package.
 
+**Note:** This will override your existing config file.
 You can publish the config file of the package with:
 ```bash
-php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
 ```
 
 ## Usage
