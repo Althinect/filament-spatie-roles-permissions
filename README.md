@@ -86,10 +86,17 @@ reorder Post
 ```
 
 ### Generating Policies
-Policies will be generated with the respective permission
+Policies will be generated with the respective permission. This won't replace any existing policies
 
 ```bash
 php artisan permissions:sync -P|--policies
+```
+
+### Overriding existing Policies
+This will override existing policy classes
+
+```bash
+php artisan permissions:sync -O|--oep
 ```
 
 ### Ignoring prompts
@@ -98,7 +105,7 @@ You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all``
 ***Recommended only for new projects as it will replace Policy files***
 
 ```bash
-php artisan permissions:sync -CPY
+php artisan permissions:sync -COPY
 ```
 
 ### Adding a Super Admin
