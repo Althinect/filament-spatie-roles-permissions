@@ -23,6 +23,8 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --fo
 ```
 ***Note that your existing settings will be overriden***
 
+#### If you like our work Don't forget to STAR the project 
+
 ## Installation
 
 You can install the package via composer:
