@@ -74,11 +74,7 @@ class PermissionResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
-        $models = $commands->getAllModels();
-        $checkBoxes =  array_map(function (\ReflectionClass $model) {
-            return Checkbox::make($model->getShortName());
-        }, $models);
+
 
         return $table
             ->columns([
@@ -94,13 +90,18 @@ class PermissionResource extends Resource
             ])
             ->filters([
                 Filter::make('models')
-                    ->form($checkBoxes)
+                    ->form(function() {
+                        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
+                        $models = $commands->getAllModels();
+                        return  array_map(function (\ReflectionClass $model) {
+                            return Checkbox::make($model->getShortName());
+                        }, $models);
+                    })
                     ->query(function (Builder $query, array $data) {
-
                        return $query->where(function (Builder $query) use ($data) {
                             foreach ($data as $key => $value) {
                                 if ($value) {
-                                    $query->orWhere('name', 'like', '%'.$key.'%');
+                                    $query->orWhere('name', 'like', eval(config('filament-spatie-roles-permissions.model_filter_key')));
                                 }
                             }
                         });
