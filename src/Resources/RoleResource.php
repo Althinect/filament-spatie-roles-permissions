@@ -26,6 +26,7 @@ class RoleResource extends Resource
     {
         return config('filament-spatie-roles-permissions.should_register_on_navigation.roles', true);
     }
+
     public static function getModel(): string
     {
         return config('permission.models.role', Role::class);
@@ -56,15 +57,17 @@ class RoleResource extends Resource
                             ->schema([
                                 TextInput::make('name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
-                                TextInput::make('guard_name')
+                                Select::make('guard_name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
-                                    ->datalist(config('filament-spatie-roles-permissions.generator.guard_names')),
+                                    ->options(config('filament-spatie-roles-permissions.guard_names'))
+                                    ->default(config('filament-spatie-roles-permissions.default_guard_name')),
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
-                                Select::make(config('permission.team_foreign_key', 'team_id'))->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
+                                Select::make(config('permission.team_foreign_key', 'team_id'))
+                                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
                                     ->hidden(!config('permission.teams', false))
                                     ->options(
                                         fn() => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
@@ -91,7 +94,7 @@ class RoleResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+
             ]);
     }
 
@@ -105,10 +108,10 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListRoles::route('/'),
+            'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
-            'edit'   => EditRole::route('/{record}/edit'),
-            'view'   => ViewRole::route('/{record}')
+            'edit' => EditRole::route('/{record}/edit'),
+            'view' => ViewRole::route('/{record}')
         ];
     }
 }

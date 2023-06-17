@@ -8,17 +8,17 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class PermissionResource extends Resource
 {
@@ -58,14 +58,15 @@ class PermissionResource extends Resource
                         Grid::make(2)->schema([
                             TextInput::make('name')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
-                            TextInput::make('guard_name')
+                            Select::make('guard_name')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
-                                ->datalist(config('filament-spatie-roles-permissions.generator.guard_names')),
+                                ->options(config('filament-spatie-roles-permissions.guard_names'))
+                                ->default(config('filament-spatie-roles-permissions.default_guard_name')),
                             Select::make('roles')
                                 ->multiple()
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
                                 ->relationship('roles', 'name')
-                                ->preload(config('filament-spatie-roles-permissions.preload_roles'))
+                                ->preload(config('filament-spatie-roles-permissions.preload_roles', true))
                         ])
                     ])
             ]);
@@ -73,6 +74,12 @@ class PermissionResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
+        $models = $commands->getAllModels();
+        $checkBoxes =  array_map(function (\ReflectionClass $model) {
+            return Checkbox::make($model->getShortName());
+        }, $models);
+
         return $table
             ->columns([
                 TextColumn::make('id')
@@ -86,7 +93,18 @@ class PermissionResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                Filter::make('models')
+                    ->form($checkBoxes)
+                    ->query(function (Builder $query, array $data) {
+
+                       return $query->where(function (Builder $query) use ($data) {
+                            foreach ($data as $key => $value) {
+                                if ($value) {
+                                    $query->orWhere('name', 'like', '%'.$key.'%');
+                                }
+                            }
+                        });
+                    })
             ]);
     }
 
@@ -100,10 +118,10 @@ class PermissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListPermissions::route('/'),
+            'index' => ListPermissions::route('/'),
             'create' => CreatePermission::route('/create'),
-            'edit'   => EditPermission::route('/{record}/edit'),
-            'view'   => ViewPermission::route('/{record}')
+            'edit' => EditPermission::route('/{record}/edit'),
+            'view' => ViewPermission::route('/{record}')
         ];
     }
 }

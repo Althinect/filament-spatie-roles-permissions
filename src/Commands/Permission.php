@@ -39,11 +39,7 @@ class Permission extends Command
 
     public function handle(): void
     {
-        $customModels = $this->getCustomModels();
-
-        $models = $this->getModels();
-
-        $classes = array_merge($customModels, $models);
+        $classes = $this->getAllModels();
 
         $classes = array_diff($classes, $this->getExcludedModels());
 
@@ -234,5 +230,13 @@ class Permission extends Command
             fclose($handle);
         }
         return $ns;
+    }
+
+    public function getAllModels(): array
+    {
+        $models = $this->getModels();
+        $customModels = $this->getCustomModels();
+
+        return array_merge($models, $customModels);
     }
 }

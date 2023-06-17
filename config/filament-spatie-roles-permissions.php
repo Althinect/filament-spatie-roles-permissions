@@ -2,12 +2,12 @@
 
 return [
 
-    'preload_roles' => false,
+    'preload_roles' => true,
 
     'preload_permissions' => false,
-    
+
     'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
-    
+
     'team_model' => \App\Models\Team::class,
 
     /*
@@ -18,11 +18,18 @@ return [
         'roles' => true
     ],
 
+    'guard_names' => [
+        'web' => 'web',
+        'api' => 'api'
+    ],
+
+    'default_guard_name' => null,
+
     'generator' => [
 
         'guard_names' => [
             'web',
-            //'api'
+            'api'
         ],
 
         'permission_affixes' => [
