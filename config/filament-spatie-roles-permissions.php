@@ -25,6 +25,9 @@ return [
 
     'default_guard_name' => null,
 
+
+    'model_filter_key' => 'return \'%\'.$key;', // Eg: 'return \'%\'.$key.'\%\';'
+
     'generator' => [
 
         'guard_names' => [
