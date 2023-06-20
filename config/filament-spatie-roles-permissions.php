@@ -2,19 +2,39 @@
 
 return [
 
-    'preload_roles' => false,
+    'preload_roles' => true,
 
     'preload_permissions' => false,
-    
+
     'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
     
     'team_model' => \App\Models\Team::class,
+
+    'team_model' => \App\Models\Team::class,
+
+    /*
+     * Set to false to remove from navigation
+     */
+    'should_register_on_navigation' => [
+        'permissions' => true,
+        'roles' => true
+    ],
+
+    'guard_names' => [
+        'web' => 'web',
+        'api' => 'api'
+    ],
+
+    'default_guard_name' => null,
+
+
+    'model_filter_key' => 'return \'%\'.$key;', // Eg: 'return \'%\'.$key.'\%\';'
 
     'generator' => [
 
         'guard_names' => [
             'web',
-            //'api'
+            'api'
         ],
 
         'permission_affixes' => [
