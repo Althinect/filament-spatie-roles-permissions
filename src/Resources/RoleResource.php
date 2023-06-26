@@ -7,6 +7,7 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\EditRo
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ListRoles;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ViewRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\PermissionRelationManager;
+use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\UserRelationManager;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MultiSelect;
@@ -103,6 +104,7 @@ class RoleResource extends Resource
     {
         return [
             PermissionRelationManager::class,
+            UserRelationManager::class,
         ];
     }
 
