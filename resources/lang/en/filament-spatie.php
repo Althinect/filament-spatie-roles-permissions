@@ -25,5 +25,6 @@ return [
     'section.roles' => 'Roles',
     'section.roles_and_permissions' => 'Roles and Permissions',
     'select-team' => 'Select a Team',
-    'select-team-hint' => 'Leave blank for a global role'
+    'select-team-hint' => 'Leave blank for a global role',
+    'section.users' => 'Users'
 ];
