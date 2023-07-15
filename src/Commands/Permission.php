@@ -3,17 +3,15 @@
 namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
 use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\ManipulateFiles;
-use Filament\Facades\Filament;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission as PermissionModel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use ReflectionClass;
+use ReflectionException;
+use Spatie\Permission\Models\Permission as PermissionModel;
 
 class Permission extends Command
 {
@@ -37,6 +35,10 @@ class Permission extends Command
         $this->config = config('filament-spatie-roles-permissions.generator');
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws FileNotFoundException
+     */
     public function handle(): void
     {
         $classes = $this->getAllModels();
@@ -70,6 +72,10 @@ class Permission extends Command
         }
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws FileNotFoundException
+     */
     public function prepareClassPermissionsAndPolicies($classes): void
     {
         $filesystem = new Filesystem();
@@ -100,7 +106,7 @@ class Permission extends Command
                 $policyVariables = [
                     'class' => $modelName . 'Policy',
                     'namespacedModel' => $model->getName(),
-                    'namespacedUserModel' => (new \ReflectionClass($this->config['user_model']))->getName(),
+                    'namespacedUserModel' => (new ReflectionClass($this->config['user_model']))->getName(),
                     'namespace' => $this->config['policies_namespace'],
                     'user' => 'User',
                     'model' => $modelName,
@@ -142,6 +148,9 @@ class Permission extends Command
         }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function getModels(): array
     {
         $models = [];
@@ -151,21 +160,31 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceNameSpace = $this->extractNamespace($resource);
-                $reflection = new \ReflectionClass($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension());
-                if ($reflection->getParentClass()->getName() == 'Filament\Resources\Resource') {
-                    $models[] = new \ReflectionClass(app($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension())->getModel());
-
+                $reflection = new ReflectionClass($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension());
+                if (
+                    !$reflection->isAbstract() &&
+                    $reflection->getParentClass()->getName() == 'Filament\Resources\Resource'
+                ) {
+                    $models[] = new ReflectionClass(app($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension())->getModel());
                 }
             }
         }
 
-        foreach ($this->config['model_directories'] as $modelDirectory) {
-            $models = array_merge($models, $this->getClassesInDirectory($modelDirectory));
+        $modelsInDirectory = [];
+        foreach ($this->config['models_directories'] as $directory) {
+
+            $modelsInDirectory[] = $this->getClassesInDirectory($directory);
         }
 
-        return $models;
+        return array_merge($models, $modelsInDirectory);
+
     }
 
+
+
+    /**
+     * @throws ReflectionException
+     */
     private function getClassesInDirectory($path): array
     {
         $files = File::files($path);
@@ -174,8 +193,11 @@ class Permission extends Command
         foreach ($files as $file) {
             $namespace = $this->extractNamespace($file);
             $class = new ($namespace . '\\' . $file->getFilenameWithoutExtension());
-            $model = new \ReflectionClass($class);
-            $models[] = $model;
+            $model = new ReflectionClass($class);
+            if (!$model->isAbstract()) {
+                $models[] = $model;
+            }
+
         }
 
         return $models;
@@ -239,4 +261,6 @@ class Permission extends Command
 
         return array_merge($models, $customModels);
     }
+
+
 }
