@@ -170,16 +170,12 @@ class Permission extends Command
             }
         }
 
-        $modelsInDirectory = [];
-        foreach ($this->config['models_directories'] as $directory) {
-
-            $modelsInDirectory[] = $this->getClassesInDirectory($directory);
+        foreach ($this->config['model_directories'] as $directory) {
+            $models = array_merge($models, $this->getClassesInDirectory($directory));
         }
 
-        return array_merge($models, $modelsInDirectory);
-
+        return $models;
     }
-
 
 
     /**
