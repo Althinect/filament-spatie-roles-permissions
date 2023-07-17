@@ -188,7 +188,7 @@ class Permission extends Command
 
         foreach ($files as $file) {
             $namespace = $this->extractNamespace($file);
-            $class = new ($namespace . '\\' . $file->getFilenameWithoutExtension());
+            $class = $namespace . '\\' . $file->getFilenameWithoutExtension();
             $model = new ReflectionClass($class);
             if (!$model->isAbstract()) {
                 $models[] = $model;
