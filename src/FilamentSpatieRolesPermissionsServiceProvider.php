@@ -5,11 +5,10 @@ namespace Althinect\FilamentSpatieRolesPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Commands\Permission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
-use Filament\PluginServiceProvider;
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 
-class FilamentSpatieRolesPermissionsServiceProvider extends PluginServiceProvider
+class FilamentSpatieRolesPermissionsServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-spatie-roles-permissions';
 
