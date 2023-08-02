@@ -2,7 +2,8 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 [![Total Downloads](https://img.shields.io/packagist/dt/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
-![GitHub Actions](https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg)
+
+[//]: # (![GitHub Actions]&#40;https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg&#41;)
 
 This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. 
 
@@ -30,7 +31,7 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --fo
 You can install the package via composer:
 
 ```bash
-composer require althinect/filament-spatie-roles-permissions
+composer require althinect/filament-spatie-roles-permissions: v1.3
 ```
 
 Since the package depends on [Spatie's Permission](https://spatie.be/docs/laravel-permission/v5/introduction) package. You have to publish the migrations by running:
