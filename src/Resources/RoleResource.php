@@ -10,17 +10,21 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationMana
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\UserRelationManager;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
+    protected static ?string $model = Role::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function shouldRegisterNavigation(): bool
@@ -38,7 +42,7 @@ class RoleResource extends Resource
         return __('filament-spatie-roles-permissions::filament-spatie.section.role');
     }
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
@@ -65,19 +69,28 @@ class RoleResource extends Resource
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
+//                                    ->options(
+//                                        function () {
+//                                            $permissions = config('filament-spatie-roles-permissions.permission_model', Permission::class)::select('id', 'guard_name', 'name')->get();
+//
+//                                            return $permissions->mapWithKeys(function ($permission) {
+//                                                return [$permission->id => $permission->name.' ('.$permission->guard_name.')'];
+//                                            });
+//                                        }
+//                                    )
                                     ->relationship('permissions', 'name')
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
                                 Select::make(config('permission.team_foreign_key', 'team_id'))
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
-                                    ->hidden(!config('permission.teams', false))
+                                    ->hidden(! config('permission.teams', false))
                                     ->options(
-                                        fn() => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
+                                        fn () => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
                                     )
-                                    ->dehydrated(fn($state) => (int) $state <= 0)
+                                    ->dehydrated(fn ($state) => (int) $state <= 0)
                                     ->placeholder(__('filament-spatie-roles-permissions::filament-spatie.select-team'))
                                     ->hint(__('filament-spatie-roles-permissions::filament-spatie.select-team-hint')),
-                            ])
-                    ])
+                            ]),
+                    ]),
             ]);
     }
 
@@ -97,6 +110,18 @@ class RoleResource extends Resource
             ])
             ->filters([
 
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 
@@ -104,7 +129,7 @@ class RoleResource extends Resource
     {
         return [
             PermissionRelationManager::class,
-            UserRelationManager::class,
+            UserRelationManager::class
         ];
     }
 
@@ -114,7 +139,7 @@ class RoleResource extends Resource
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
             'edit' => EditRole::route('/{record}/edit'),
-            'view' => ViewRole::route('/{record}')
+            'view' => ViewRole::route('/{record}'),
         ];
     }
 }

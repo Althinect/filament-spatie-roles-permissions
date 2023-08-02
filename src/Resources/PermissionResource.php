@@ -12,13 +12,17 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionResource extends Resource
 {
@@ -39,7 +43,7 @@ class PermissionResource extends Resource
         return __('filament-spatie-roles-permissions::filament-spatie.section.permission');
     }
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
@@ -66,9 +70,9 @@ class PermissionResource extends Resource
                                 ->multiple()
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
                                 ->relationship('roles', 'name')
-                                ->preload(config('filament-spatie-roles-permissions.preload_roles', true))
-                        ])
-                    ])
+                                ->preload(config('filament-spatie-roles-permissions.preload_roles', true)),
+                        ]),
+                    ]),
             ]);
     }
 
@@ -88,29 +92,54 @@ class PermissionResource extends Resource
             ])
             ->filters([
                 Filter::make('models')
-                    ->form(function() {
+                    ->form(function () {
                         $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
                         $models = $commands->getAllModels();
-                        return  array_map(function (\ReflectionClass $model) {
+
+                        return array_map(function (\ReflectionClass $model) {
                             return Checkbox::make($model->getShortName());
                         }, $models);
                     })
                     ->query(function (Builder $query, array $data) {
-                       return $query->where(function (Builder $query) use ($data) {
+                        return $query->where(function (Builder $query) use ($data) {
                             foreach ($data as $key => $value) {
                                 if ($value) {
                                     $query->orWhere('name', 'like', eval(config('filament-spatie-roles-permissions.model_filter_key')));
                                 }
                             }
                         });
+                    }),
+            ])->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+                BulkAction::make('Attach Role')
+                    ->action(function (Collection $records, array $data): void {
+                        foreach ($records as $record) {
+                            $record->roles()->sync($data['role']);
+                            $record->save();
+                        }
                     })
+                    ->form([
+                        Select::make('role')
+                            ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
+                            ->options(Role::query()->pluck('name', 'id'))
+                            ->required(),
+                    ])->deselectRecordsAfterCompletion(),
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            RoleRelationManager::class
+            RoleRelationManager::class,
         ];
     }
 
@@ -120,7 +149,7 @@ class PermissionResource extends Resource
             'index' => ListPermissions::route('/'),
             'create' => CreatePermission::route('/create'),
             'edit' => EditPermission::route('/{record}/edit'),
-            'view' => ViewPermission::route('/{record}')
+            'view' => ViewPermission::route('/{record}'),
         ];
     }
 }

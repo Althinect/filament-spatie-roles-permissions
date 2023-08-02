@@ -4,7 +4,7 @@ return [
 
     'preload_roles' => true,
 
-    'preload_permissions' => false,
+    'preload_permissions' => true,
 
     'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
 
@@ -15,16 +15,15 @@ return [
      */
     'should_register_on_navigation' => [
         'permissions' => true,
-        'roles' => true
+        'roles' => true,
     ],
 
     'guard_names' => [
         'web' => 'web',
-        'api' => 'api'
+        'api' => 'api',
     ],
 
     'default_guard_name' => null,
-
 
     'model_filter_key' => 'return \'%\'.$key;', // Eg: 'return \'%\'.$key.'\%\';'
 
@@ -32,7 +31,7 @@ return [
 
         'guard_names' => [
             'web',
-            'api'
+            'api',
         ],
 
         'permission_affixes' => [
@@ -77,7 +76,7 @@ return [
          * Include directories which consists of models.
          */
         'model_directories' => [
-            app_path('Models')
+            app_path('Models'),
             //app_path('Domains/Forum')
         ],
 
@@ -96,7 +95,7 @@ return [
         ],
 
         'excluded_policy_models' => [
-            \App\Models\User::class
+            \App\Models\User::class,
         ],
 
         /*
@@ -106,9 +105,8 @@ return [
             //'view-log'
         ],
 
-
         'user_model' => \App\Models\User::class,
 
-        'policies_namespace' => 'App\Policies'
+        'policies_namespace' => 'App\Policies',
     ],
 ];

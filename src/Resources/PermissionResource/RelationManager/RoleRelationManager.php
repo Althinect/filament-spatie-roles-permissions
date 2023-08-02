@@ -2,15 +2,13 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager;
 
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
-use Filament\Resources\Table;
-use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
-class RoleRelationManager extends BelongsToManyRelationManager
+class RoleRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
 
@@ -26,19 +24,19 @@ class RoleRelationManager extends BelongsToManyRelationManager
         return __('filament-spatie-roles-permissions::filament-spatie.section.roles');
     }
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                 TextInput::make('guard_name')
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
 
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

@@ -3,15 +3,22 @@
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages;
 
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
-use Spatie\Permission\Models\Role;
 
 class ListPermissions extends ListRecords
 {
     protected static string $resource = PermissionResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make(),
+        ];
+    }
 
     protected function getTableBulkActions(): array
     {
@@ -30,7 +37,7 @@ class ListPermissions extends ListRecords
                         ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
                         ->options($roleModel::query()->pluck('name', 'id'))
                         ->required(),
-                ])->deselectRecordsAfterCompletion()
+                ])->deselectRecordsAfterCompletion(),
         ];
 
     }

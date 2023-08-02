@@ -2,7 +2,6 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
-use Althinect\FilamentSpatieRolesPermissions\Commands\Concerns\ManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
@@ -52,7 +51,7 @@ class Permission extends Command
         $this->prepareCustomPermissions();
 
         foreach ($this->permissions as $permission) {
-            $this->comment("Syncing Permission for: " . $permission['name']);
+            $this->comment('Syncing Permission for: '.$permission['name']);
             PermissionModel::firstOrCreate($permission);
         }
     }
@@ -84,7 +83,7 @@ class Permission extends Command
             $modelName = $model->getShortName();
 
             $stub = '/stubs/genericPolicy.stub';
-            $contents = $filesystem->get(__DIR__ . $stub);
+            $contents = $filesystem->get(__DIR__.$stub);
 
             foreach ($this->permissionAffixes() as $key => $permissionAffix) {
                 foreach ($this->guardNames() as $guardName) {
@@ -92,11 +91,11 @@ class Permission extends Command
                     $permission = eval($this->config['permission_name']);
                     $this->permissions[] = [
                         'name' => $permission,
-                        'guard_name' => $guardName
+                        'guard_name' => $guardName,
                     ];
 
                     if ($this->option('policies')) {
-                        $contents = Str::replace("{{ " . $key . " }}", $permission, $contents);
+                        $contents = Str::replace('{{ '.$key.' }}', $permission, $contents);
                     }
                 }
             }
@@ -104,33 +103,33 @@ class Permission extends Command
             if ($this->option('policies') || $this->option('yes-to-all')) {
 
                 $policyVariables = [
-                    'class' => $modelName . 'Policy',
+                    'class' => $modelName.'Policy',
                     'namespacedModel' => $model->getName(),
                     'namespacedUserModel' => (new ReflectionClass($this->config['user_model']))->getName(),
                     'namespace' => $this->config['policies_namespace'],
                     'user' => 'User',
                     'model' => $modelName,
-                    'modelVariable' => $modelName == 'User' ? 'model' : Str::lower($modelName)
+                    'modelVariable' => $modelName == 'User' ? 'model' : Str::lower($modelName),
                 ];
 
                 foreach ($policyVariables as $search => $replace) {
                     if ($modelName == 'User' && $search == 'namespacedModel') {
-                        $contents = Str::replace("use {{ namespacedModel }};", '', $contents);
+                        $contents = Str::replace('use {{ namespacedModel }};', '', $contents);
                     } else {
-                        $contents = Str::replace("{{ " . $search . " }}", $replace, $contents);
+                        $contents = Str::replace('{{ '.$search.' }}', $replace, $contents);
                     }
                 }
 
-                if ($filesystem->exists(app_path('Policies/' . $modelName . 'Policy.php'))) {
+                if ($filesystem->exists(app_path('Policies/'.$modelName.'Policy.php'))) {
                     if ($this->option('oep')) {
-                        $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
-                        $this->comment('Overriding Existing Policy: ' . $modelName);
+                        $filesystem->put(app_path('Policies/'.$modelName.'Policy.php'), $contents);
+                        $this->comment('Overriding Existing Policy: '.$modelName);
                     } else {
-                        $this->warn('Policy already exists for: ' . $modelName);
+                        $this->warn('Policy already exists for: '.$modelName);
                     }
                 } else {
-                    $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
-                    $this->comment('Creating Policy: ' . $modelName);
+                    $filesystem->put(app_path('Policies/'.$modelName.'Policy.php'), $contents);
+                    $this->comment('Creating Policy: '.$modelName);
                 }
             }
         }
@@ -142,7 +141,7 @@ class Permission extends Command
             foreach ($this->guardNames() as $guardName) {
                 $this->permissions[] = [
                     'name' => $customPermission,
-                    'guard_name' => $guardName
+                    'guard_name' => $guardName,
                 ];
             }
         }
@@ -160,12 +159,12 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceNameSpace = $this->extractNamespace($resource);
-                $reflection = new ReflectionClass($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension());
+                $reflection = new ReflectionClass($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension());
                 if (
-                    !$reflection->isAbstract() &&
+                    ! $reflection->isAbstract() &&
                     $reflection->getParentClass()->getName() == 'Filament\Resources\Resource'
                 ) {
-                    $models[] = new ReflectionClass(app($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension())->getModel());
+                    $models[] = new ReflectionClass(app($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension())->getModel());
                 }
             }
         }
@@ -177,7 +176,6 @@ class Permission extends Command
         return $models;
     }
 
-
     /**
      * @throws ReflectionException
      */
@@ -188,9 +186,9 @@ class Permission extends Command
 
         foreach ($files as $file) {
             $namespace = $this->extractNamespace($file);
-            $class = $namespace . '\\' . $file->getFilenameWithoutExtension();
+            $class = $namespace.'\\'.$file->getFilenameWithoutExtension();
             $model = new ReflectionClass($class);
-            if (!$model->isAbstract()) {
+            if (! $model->isAbstract()) {
                 $models[] = $model;
             }
 
@@ -231,12 +229,11 @@ class Permission extends Command
         }, $array);
     }
 
-
     private function extractNamespace($file)
     {
 
-        $ns = NULL;
-        $handle = fopen($file, "r");
+        $ns = null;
+        $handle = fopen($file, 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 if (str_starts_with($line, 'namespace')) {
@@ -247,6 +244,7 @@ class Permission extends Command
             }
             fclose($handle);
         }
+
         return $ns;
     }
 
@@ -257,6 +255,4 @@ class Permission extends Command
 
         return array_merge($models, $customModels);
     }
-
-
 }

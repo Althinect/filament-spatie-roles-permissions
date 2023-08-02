@@ -1,25 +1,25 @@
 <?php
 
 return [
-     /*
+    /*
      |------------------------------------------------- -------------------------
      | Fields
      |------------------------------------------------- -------------------------
      */
 
-     'field.guard_name' => 'Аутентифікація (guard)',
-     'field.name' => "Ім'я",
-     'field.permissions' => 'Дозволи',
-     'field.roles' => 'Ролі',
-     /*
+    'field.guard_name' => 'Аутентифікація (guard)',
+    'field.name' => "Ім'я",
+    'field.permissions' => 'Дозволи',
+    'field.roles' => 'Ролі',
+    /*
      |------------------------------------------------- -------------------------
      | Labels
      |------------------------------------------------- -------------------------
      */
 
-     'section.permission' => 'Дозвол',
-     'section.permissions' => 'Дозволи',
-     'section.role' => 'Роль',
-     'section.roles' => 'Ролі',
-     'section.roles_and_permissions' => 'Ролі та дозволи',
+    'section.permission' => 'Дозвол',
+    'section.permissions' => 'Дозволи',
+    'section.role' => 'Роль',
+    'section.roles' => 'Ролі',
+    'section.roles_and_permissions' => 'Ролі та дозволи',
 ];

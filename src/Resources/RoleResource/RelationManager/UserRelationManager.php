@@ -2,19 +2,20 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager;
 
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
-use Filament\Resources\Table;
-use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
-class UserRelationManager extends BelongsToManyRelationManager
+class UserRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
 
     protected static ?string $recordTitleAttribute = 'name';
+
 
     protected static function getModelLabel(): string
     {
@@ -26,7 +27,7 @@ class UserRelationManager extends BelongsToManyRelationManager
         return __('filament-spatie-roles-permissions::filament-spatie.section.users');
     }
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -35,7 +36,7 @@ class UserRelationManager extends BelongsToManyRelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -44,6 +45,12 @@ class UserRelationManager extends BelongsToManyRelationManager
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ])
             ->filters([
+
+            ])->headerActions([
+                AttachAction::make()
+            ])->actions([
+                DetachAction::make()
+            ])->bulkActions([
                 //
             ]);
     }

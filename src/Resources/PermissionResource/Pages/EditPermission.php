@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages;
 

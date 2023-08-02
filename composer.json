@@ -16,13 +16,14 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0|^8.1|^8.2",
-        "filament/filament": "^2.0|^2.1",
-        "illuminate/support": "^8|^9|^10",
+        "php": "^8.1|^8.2",
+        "filament/filament": "^3.0",
+        "illuminate/support": "^9|^10",
         "spatie/laravel-permission": "^5.4"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
+        "laravel/pint": "^1.10",
+        "orchestra/testbench": "^7.0",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
@@ -52,5 +53,7 @@
                 "FilamentSpatieRolesPermissions": "Althinect\\FilamentSpatieRolesPermissions\\FilamentSpatieRolesPermissionsFacade"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

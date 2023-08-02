@@ -11,6 +11,7 @@ return [
     'field.name' => 'Name',
     'field.permissions' => 'Permissions',
     'field.roles' => 'Roles',
+    'field.role' => 'Role',
     'field.team' => 'Team',
 
     /*
@@ -26,5 +27,5 @@ return [
     'section.roles_and_permissions' => 'Roles and Permissions',
     'select-team' => 'Select a Team',
     'select-team-hint' => 'Leave blank for a global role',
-    'section.users' => 'Users'
+    'section.users' => 'Users',
 ];

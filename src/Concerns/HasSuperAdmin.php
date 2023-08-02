@@ -2,8 +2,6 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Concerns;
 
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 trait HasSuperAdmin
