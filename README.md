@@ -38,6 +38,16 @@ Since the package depends on [Spatie's Permission](https://spatie.be/docs/larave
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
+Add the plugin to teh AdminPanelProvider
+```php
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+
+$panel
+    ...
+    ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+
+```
+
 Now you should add any other configurations needed for the Spatie-Permission package.
 
 **Note:** This will override your existing config file.
