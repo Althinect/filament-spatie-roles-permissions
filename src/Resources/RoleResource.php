@@ -80,7 +80,7 @@ class RoleResource extends Resource
 //                                    )
                                     ->relationship('permissions', 'name')
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
-                                Select::make(config('permission.team_foreign_key', 'team_id'))
+                                Select::make(config('permission.column_names.team_foreign_key', 'team_id'))
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
                                     ->hidden(! config('permission.teams', false))
                                     ->options(
