@@ -2,13 +2,13 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager;
 
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionRelationManager extends BelongsToManyRelationManager
 {
@@ -38,6 +38,9 @@ class PermissionRelationManager extends BelongsToManyRelationManager
             ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -49,6 +52,11 @@ class PermissionRelationManager extends BelongsToManyRelationManager
                     ->searchable()
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
 
+            ])
+            ->actions([
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DetachAction::make()->after(fn() => app()->make(PermissionRegistrar::class)->forgetCachedPermissions()),
             ])
             ->filters([
                 //
