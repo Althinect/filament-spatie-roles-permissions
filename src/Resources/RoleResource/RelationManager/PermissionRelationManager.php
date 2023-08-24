@@ -10,6 +10,7 @@ use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Actions\DetachBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionRelationManager extends RelationManager
 {
@@ -53,11 +54,13 @@ class PermissionRelationManager extends RelationManager
             ->filters([
 
             ])->headerActions([
-                AttachAction::make('Attach Permission')->preloadRecordSelect()
+                AttachAction::make('Attach Permission')->preloadRecordSelect()->after(fn() => app()
+                    ->make(PermissionRegistrar::class)
+                    ->forgetCachedPermissions()),
             ])->actions([
-                DetachAction::make()
+                DetachAction::make()->after(fn() => app()->make(PermissionRegistrar::class)->forgetCachedPermissions()),
             ])->bulkActions([
-                DetachBulkAction::make()
+                DetachBulkAction::make()->after(fn() => app()->make(PermissionRegistrar::class)->forgetCachedPermissions()),
             ]);
     }
 }
