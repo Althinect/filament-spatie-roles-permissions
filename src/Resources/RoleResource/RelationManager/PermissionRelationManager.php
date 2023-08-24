@@ -2,7 +2,6 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager;
 
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
