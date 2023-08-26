@@ -25,10 +25,10 @@ return [
 
     'toggleable_guard_names' => [
         'roles' => [
-            'isHiddenByDefault' => true,
+            'isToggledHiddenByDefault' => true,
         ],
         'permissions' => [
-            'isHiddenByDefault' => true,
+            'isToggledHiddenByDefault' => true,
         ],
     ],
 
