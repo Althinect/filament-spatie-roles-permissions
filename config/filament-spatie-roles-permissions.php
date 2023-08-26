@@ -23,6 +23,15 @@ return [
         'api' => 'api',
     ],
 
+    'toggleable_guard_names' => [
+        'roles' => [
+            'isHiddenByDefault' => true,
+        ],
+        'permissions' => [
+            'isHiddenByDefault' => true,
+        ],
+    ],
+
     'default_guard_name' => null,
 
     'model_filter_key' => 'return \'%\'.$key;', // Eg: 'return \'%\'.$key.'\%\';'

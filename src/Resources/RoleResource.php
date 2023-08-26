@@ -105,6 +105,7 @@ class RoleResource extends Resource
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
                     ->searchable(),
                 TextColumn::make('guard_name')
+                    ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                     ->searchable(),
             ])
