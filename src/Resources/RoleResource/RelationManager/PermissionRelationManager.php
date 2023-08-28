@@ -8,6 +8,7 @@ use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Spatie\Permission\PermissionRegistrar;
 
 class PermissionRelationManager extends BelongsToManyRelationManager
@@ -54,12 +55,36 @@ class PermissionRelationManager extends BelongsToManyRelationManager
 
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()->after(fn() => app()->make(PermissionRegistrar::class)->forgetCachedPermissions()),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DetachAction::make()->after(fn() => app()->make(PermissionRegistrar::class)->forgetCachedPermissions()),
             ])
             ->filters([
                 //
             ]);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function afterAttach()
+    {
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function afterBulkDelete()
+    {
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function afterBulkDetach()
+    {
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
