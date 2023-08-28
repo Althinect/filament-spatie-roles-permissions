@@ -71,4 +71,20 @@ class PermissionRelationManager extends BelongsToManyRelationManager
     {
         app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
     }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function afterBulkDelete()
+    {
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function afterBulkDetach()
+    {
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
 }
