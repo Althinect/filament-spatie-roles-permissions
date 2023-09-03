@@ -57,6 +57,7 @@ class PermissionResource extends Resource
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('name')
+                                ->required()
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                             Select::make('guard_name')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
