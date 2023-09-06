@@ -161,7 +161,7 @@ class Permission extends Command
                 $resourceNameSpace = $this->extractNamespace($resource);
                 $reflection = new ReflectionClass($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension());
                 if (
-                    ! $reflection->isAbstract() &&
+                    ! $reflection->isAbstract() && $reflection->getParentClass() &&
                     $reflection->getParentClass()->getName() == 'Filament\Resources\Resource'
                 ) {
                     $models[] = new ReflectionClass(app($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension())->getModel());
