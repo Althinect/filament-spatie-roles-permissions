@@ -79,6 +79,9 @@ class Permission extends Command
     {
         $filesystem = new Filesystem();
 
+        // Ensure the policies folder exists
+        File::ensureDirectoryExists(app_path('Policies/'));
+
         foreach ($classes as $model) {
             $modelName = $model->getShortName();
 
