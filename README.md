@@ -60,7 +60,7 @@ php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --fo
 
 ### Form
 
-You can add the following to your *form* method in your UserResource 
+You can add the following to your *form* method in your UserResource  ( In Filament V3)
 
 ```php
 return $form->schema([
