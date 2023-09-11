@@ -8,6 +8,7 @@ return [
     */
 
     'field.guard_name' => 'Guard Name',
+    'field.permissions_count' => 'Permissions Count',
     'field.name' => 'Name',
     'field.permissions' => 'Permissions',
     'field.roles' => 'Roles',
