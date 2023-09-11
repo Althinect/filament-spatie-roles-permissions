@@ -17,7 +17,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -62,12 +61,12 @@ class RoleResource extends Resource
                             ->schema([
                                 TextInput::make('name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
-                                     ->required(),
+                                    ->required(),
                                 Select::make('guard_name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                     ->options(config('filament-spatie-roles-permissions.guard_names'))
                                     ->default(config('filament-spatie-roles-permissions.default_guard_name'))
-                                     ->required(),
+                                    ->required(),
                                 Select::make('permissions')
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
@@ -106,6 +105,11 @@ class RoleResource extends Resource
                 TextColumn::make('name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
                     ->searchable(),
+                TextColumn::make('permissions_count')
+                    ->counts('permissions')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions_count'))
+                    ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true))
+                    ->searchable(),
                 TextColumn::make('guard_name')
                     ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
@@ -132,7 +136,7 @@ class RoleResource extends Resource
     {
         return [
             PermissionRelationManager::class,
-            UserRelationManager::class
+            UserRelationManager::class,
         ];
     }
 
