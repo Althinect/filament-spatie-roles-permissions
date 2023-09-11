@@ -38,7 +38,7 @@ Since the package depends on [Spatie's Permission](https://spatie.be/docs/larave
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
-Add the plugin to teh AdminPanelProvider
+Add the plugin to the `AdminPanelProvider`
 ```php
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 
