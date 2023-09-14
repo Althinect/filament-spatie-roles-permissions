@@ -9,6 +9,7 @@ use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class UserRelationManager extends RelationManager
 {
@@ -16,6 +17,16 @@ class UserRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    /*
+     * Support changing tab title in RelationManager.
+     */
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.users') ?? (string)str(static::getRelationshipName())
+            ->kebab()
+            ->replace('-', ' ')
+            ->headline();
+    }
 
     protected static function getModelLabel(): string
     {
@@ -39,6 +50,8 @@ class UserRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            // Support changing table heading by translations.
+            ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.users'))
             ->columns([
                 TextColumn::make('name')
                     ->searchable()

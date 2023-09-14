@@ -39,6 +39,8 @@ class RoleRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            // Support changing table heading by translations.
+            ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.roles'))
             ->columns([
                 TextColumn::make('name')
                     ->searchable()

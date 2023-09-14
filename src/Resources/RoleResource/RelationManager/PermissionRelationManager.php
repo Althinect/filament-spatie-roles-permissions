@@ -10,6 +10,7 @@ use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Actions\DetachBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\PermissionRegistrar;
 
 class PermissionRelationManager extends RelationManager
@@ -17,6 +18,17 @@ class PermissionRelationManager extends RelationManager
     protected static string $relationship = 'permissions';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    /*
+     * Support changing tab title by translations in RelationManager.
+     */
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament-spatie-roles-permissions::filament-spatie.section.permissions') ?? (string)str(static::getRelationshipName())
+            ->kebab()
+            ->replace('-', ' ')
+            ->headline();
+    }
 
     protected static function getModelLabel(): string
     {
@@ -42,6 +54,8 @@ class PermissionRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            // Support changing table heading by translations.
+            ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.permissions'))
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
