@@ -42,7 +42,7 @@ class UserRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ]);
     }
@@ -53,7 +53,7 @@ class UserRelationManager extends RelationManager
             // Support changing table heading by translations.
             ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.users'))
             ->columns([
-                TextColumn::make('name')
+                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->searchable()
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ])
