@@ -30,7 +30,7 @@ class UserRelationManager extends BelongsToManyRelationManager
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ]);
     }
@@ -39,7 +39,7 @@ class UserRelationManager extends BelongsToManyRelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->searchable()
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ])
