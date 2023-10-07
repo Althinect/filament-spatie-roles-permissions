@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,8 +53,9 @@ class UserRelationManager extends RelationManager
             // Support changing table heading by translations.
             ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.users'))
             ->columns([
-                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                TextColumn::make(config('filament-spatie-roles-permissions.user_name_column'))
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
+                    ->searchable(),
             ])
             ->filters([
 
