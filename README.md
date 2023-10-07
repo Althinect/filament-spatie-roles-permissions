@@ -152,7 +152,7 @@ If you discover any security related issues, please create an issue.
 
 ## Credits
 
--   [Tharinda Rodrigo](https://github.com/UdamLiyanage/)
+-   [Tharinda Rodrigo](https://github.com/tharindarodrigo/)
 -   [Udam Liyanage](https://github.com/UdamLiyanage/)
 -   [Contributors](https://github.com/Althinect/filament-spatie-roles-permissions/graphs/contributors)
 
