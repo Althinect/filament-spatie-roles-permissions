@@ -11,7 +11,7 @@ return [
     'team_model' => \App\Models\Team::class,
 
     /*
-     * Set to false to remove from navigation
+     * Set as false to remove from navigation.
      */
     'should_register_on_navigation' => [
         'permissions' => true,
@@ -35,6 +35,8 @@ return [
     'default_guard_name' => null,
 
     'model_filter_key' => 'return \'%\'.$key;', // Eg: 'return \'%\'.$key.'\%\';'
+
+    'user_name_column' => 'name',
 
     'generator' => [
 
@@ -106,8 +108,6 @@ return [
         'excluded_policy_models' => [
             \App\Models\User::class,
         ],
-
-        'user_name_column' => 'name',
 
         /*
          * Define any other permission here

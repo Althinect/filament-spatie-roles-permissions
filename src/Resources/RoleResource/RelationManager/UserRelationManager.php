@@ -53,9 +53,9 @@ class UserRelationManager extends RelationManager
             // Support changing table heading by translations.
             ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.users'))
             ->columns([
-                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
-                    ->searchable()
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                TextColumn::make(config('filament-spatie-roles-permissions.user_name_column'))
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
+                    ->searchable(),
             ])
             ->filters([
 
