@@ -99,6 +99,8 @@ return [
             \App\Models\User::class
         ],
 
+        'user_name_column' => 'name',
+
         /*
          * Define any other permission here
          */
