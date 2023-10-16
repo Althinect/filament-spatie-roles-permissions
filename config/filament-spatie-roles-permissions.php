@@ -18,6 +18,11 @@ return [
         'roles' => true
     ],
 
+    'navigation_icon' => [
+        'permissions' => 'heroicon-o-lock-closed',
+        'roles' => 'heroicon-o-user-group',
+    ],
+
     'guard_names' => [
         'web' => 'web',
         'api' => 'api'
