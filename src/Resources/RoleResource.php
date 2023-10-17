@@ -21,7 +21,10 @@ use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    public static function getNavigationIcon(): string
+    {
+        return $navigationIcon = config('filament-spatie-roles-permissions.navigation_icon.roles', 'heroicon-o-user-group');
+    }
 
     public static function shouldRegisterNavigation(): bool
     {

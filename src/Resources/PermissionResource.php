@@ -22,7 +22,11 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionResource extends Resource
 {
-    protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
+
+    public static function getNavigationIcon(): string
+    {
+        return $navigationIcon = config('filament-spatie-roles-permissions.navigation_icon.permissions', 'heroicon-o-lock-closed');
+    }
 
     public static function shouldRegisterNavigation(): bool
     {
