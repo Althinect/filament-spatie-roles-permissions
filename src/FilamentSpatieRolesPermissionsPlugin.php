@@ -20,8 +20,10 @@ class FilamentSpatieRolesPermissionsPlugin implements Plugin
             ->resources([
                 RoleResource::class,
                 PermissionResource::class,
-            ]);
-
+            ])
+            ->tenantMiddleware([
+                SyncSpatiePermissionsTenantsWithFilament::class,
+            ], isPersistent: true);
     }
 
     public static function make(): static
