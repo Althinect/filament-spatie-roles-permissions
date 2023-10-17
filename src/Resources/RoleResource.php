@@ -8,8 +8,8 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ListRo
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ViewRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\PermissionRelationManager;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager\UserRelationManager;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -55,7 +55,7 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         Grid::make(2)
                             ->schema([
