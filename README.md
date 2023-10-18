@@ -142,6 +142,41 @@ Gate::before(function (User $user, string $ability) {
 });
 ```
 
+### Tenancy
+
+- Make sure to set  
+```php
+'teams' => true
+```
+- on the `config/permission.php`
+
+- Make sure the `team_model` on the `config/filament-spatie-roles-permissions` is correctly set.
+
+- Create a Role model which extends `Spatie\Permission\Models\Role`
+- Create a Role model which extends `Spatie\Permission\Models\Permission`
+- Add the `team` relationship in both models
+
+```php
+...
+public function team(): BelongsTo
+{
+    return $this->belongsTo(Team::class);
+}
+```
+- Add the following to the `AdminPanelProvider` to support tenancy
+
+Follow the instructions on [Filament Multi-tenancy][https://filamentphp.com/docs/3.x/panels/tenancy]
+
+```php
+use Althinect\FilamentSpatieRolesPermissions\Middleware\SyncSpatiePermissionsWithFilamentTenants;
+
+$panel
+    ...
+    ->tenantMiddleware([
+        SyncSpatiePermissionsWithFilamentTenants::class,
+    ], isPersistent: true)
+```
+
 ### Configurations
 
 In the **filament-spatie-roles-permissions.php** config file, you can customize the permission generation

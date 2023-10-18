@@ -22,7 +22,7 @@ class UserRelationManager extends RelationManager
      */
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __('filament-spatie-roles-permissions::filament-spatie.section.users') ?? (string)str(static::getRelationshipName())
+        return __('filament-spatie-roles-permissions::filament-spatie.section.users') ?? (string) str(static::getRelationshipName())
             ->kebab()
             ->replace('-', ' ')
             ->headline();
@@ -60,9 +60,9 @@ class UserRelationManager extends RelationManager
             ->filters([
 
             ])->headerActions([
-                AttachAction::make()
+                AttachAction::make(),
             ])->actions([
-                DetachAction::make()
+                DetachAction::make(),
             ])->bulkActions([
                 //
             ]);

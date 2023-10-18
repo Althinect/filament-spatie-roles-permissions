@@ -30,4 +30,3 @@ return [
     'select-team-hint' => 'Global bir rol için boş bırakın',
     'section.users' => 'Kullanıcılar',
 ];
-
