@@ -164,7 +164,7 @@ public function team(): BelongsTo
 ```
 - Add the following to the `AdminPanelProvider` to support tenancy
 
-Follow the instructions on [Filament Multi-tenancy][https://filamentphp.com/docs/3.x/panels/tenancy]
+Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
 
 ```php
 use Althinect\FilamentSpatieRolesPermissions\Middleware\SyncSpatiePermissionsWithFilamentTenants;
