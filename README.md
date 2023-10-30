@@ -144,16 +144,15 @@ Gate::before(function (User $user, string $ability) {
 
 ### Tenancy
 
-- Make sure to set  
+- Make sure to set the following on the `config/permission.php`
 ```php
 'teams' => true
 ```
-- on the `config/permission.php`
 
 - Make sure the `team_model` on the `config/filament-spatie-roles-permissions` is correctly set.
 
 - Create a Role model which extends `Spatie\Permission\Models\Role`
-- Create a Role model which extends `Spatie\Permission\Models\Permission`
+- Create a Permission model which extends `Spatie\Permission\Models\Permission`
 - Add the `team` relationship in both models
 
 ```php
