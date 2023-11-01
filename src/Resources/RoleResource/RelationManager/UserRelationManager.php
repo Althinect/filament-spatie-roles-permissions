@@ -22,7 +22,7 @@ class UserRelationManager extends RelationManager
      */
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __('filament-spatie-roles-permissions::filament-spatie.section.users') ?? (string)str(static::getRelationshipName())
+        return __('filament-spatie-roles-permissions::filament-spatie.section.users') ?? (string) str(static::getRelationshipName())
             ->kebab()
             ->replace('-', ' ')
             ->headline();
@@ -42,7 +42,7 @@ class UserRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
             ]);
     }
@@ -53,16 +53,16 @@ class UserRelationManager extends RelationManager
             // Support changing table heading by translations.
             ->heading(__('filament-spatie-roles-permissions::filament-spatie.section.users'))
             ->columns([
-                TextColumn::make('name')
-                    ->searchable()
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
+                TextColumn::make(config('filament-spatie-roles-permissions.user_name_column'))
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
+                    ->searchable(),
             ])
             ->filters([
 
             ])->headerActions([
-                AttachAction::make()
+                AttachAction::make(),
             ])->actions([
-                DetachAction::make()
+                DetachAction::make(),
             ])->bulkActions([
                 //
             ]);

@@ -21,7 +21,6 @@ class FilamentSpatieRolesPermissionsPlugin implements Plugin
                 RoleResource::class,
                 PermissionResource::class,
             ]);
-
     }
 
     public static function make(): static
