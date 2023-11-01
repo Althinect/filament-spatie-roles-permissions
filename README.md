@@ -56,6 +56,12 @@ You can publish the config file of the package with:
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
 ```
 
+You can publish translations with:
+
+```bash
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-translations"
+```
+
 ## Usage
 
 ### Form
