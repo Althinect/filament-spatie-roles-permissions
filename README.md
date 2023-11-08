@@ -12,7 +12,7 @@ Permission and Policy generations
 - Check the ``config/filament-spatie-roles-permissions-config.php``
 
 Supports permissions for teams
-- Make sure the ``teams`` attribute in the ``app/permission.php`` file is set to ``true``
+- Make sure the ``teams`` attribute in the ``config/permission.php`` file is set to ``true``
 
 ## Updating
 
