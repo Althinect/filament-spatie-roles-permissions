@@ -104,7 +104,7 @@ reorder Post
 ```
 
 ### Generating Policies
-Policies will be generated with the respective permission. This won't replace any existing policies
+To generate policies use the command below. This won't replace any existing policies
 
 ```bash
 php artisan permissions:sync -P|--policies
@@ -116,6 +116,10 @@ This will override existing policy classes
 ```bash
 php artisan permissions:sync -O|--oep
 ```
+
+### Role and Permission Policies
+Create a RolePolicy and PermissionPolicy if you wish to control the visibility of the resources on the navigation menu.
+Make sure to add them to the AuthServiceProvider. 
 
 ### Ignoring prompts
 You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
