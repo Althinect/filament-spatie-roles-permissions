@@ -9,7 +9,8 @@ return [
 
     'field.guard_name' => '认证看守器',
     'field.permissions_count' => '权限数量',
-    'field.name' => '名称',
+    'field.name' => '权限标识',
+    'field.label' => '权限名称',
     'field.permissions' => '权限',
     'field.roles' => '角色',
     'field.role' => '角色',

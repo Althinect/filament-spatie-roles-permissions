@@ -10,6 +10,7 @@ return [
     'field.guard_name' => '認證守護器',
     'field.permissions_count' => '權限數量',
     'field.name' => '名稱',
+    'field.label' => '权限名称',
     'field.permissions' => '權限',
     'field.roles' => '角色',
     'field.role' => '角色',

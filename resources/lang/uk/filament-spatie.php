@@ -9,6 +9,7 @@ return [
 
     'field.guard_name' => 'Аутентифікація (guard)',
     'field.name' => "Ім'я",
+    'field.label' => 'Label',
     'field.permissions' => 'Дозволи',
     'field.roles' => 'Ролі',
     /*

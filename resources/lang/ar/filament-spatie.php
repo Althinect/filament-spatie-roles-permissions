@@ -9,6 +9,7 @@ return [
 
     'field.guard_name' => 'اسم الحارس',
     'field.name' => 'الإسم',
+    'field.label' => 'Label',
     'field.permissions' => 'الأذونات',
     'field.roles' => 'الصلاحيات',
 

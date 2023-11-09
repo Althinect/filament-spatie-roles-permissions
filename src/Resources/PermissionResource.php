@@ -55,11 +55,15 @@ class PermissionResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $show = config('filament-spatie-roles-permissions.show_permission_label', false);
         return $form
             ->schema([
                 Card::make()
                     ->schema([
                         Grid::make(2)->schema([
+                            $show ? TextInput::make('label')
+                                ->label(__('filament-spatie-roles-permissions::filament-spatie.field.label'))
+                                ->required() : '',
                             TextInput::make('name')
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
                                 ->required(),
@@ -80,11 +84,15 @@ class PermissionResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $show = config('filament-spatie-roles-permissions.show_permission_label', false);
         return $table
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
                     ->searchable(),
+                $show ? TextColumn::make('label')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.label'))
+                    ->searchable() : '',
                 TextColumn::make('name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
                     ->searchable(),

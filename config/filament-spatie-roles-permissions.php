@@ -38,6 +38,8 @@ return [
 
     'user_name_column' => 'name',
 
+    'show_permission_label' => false,
+
     'generator' => [
 
         'guard_names' => [
@@ -66,6 +68,20 @@ return [
             'reorder',
         ],
 
+        'permission_affixes_label' => [
+
+            'viewAnyPermission' => 'view-any',
+            'viewPermission' => 'view',
+            'createPermission' => 'create',
+            'updatePermission' => 'update',
+            'deletePermission' => 'delete',
+            'restorePermission' => 'restore',
+            'forceDeletePermission' => 'force-delete',
+
+            'replicate' => 'replicate',
+            'reorder' => 'reorder',
+        ],
+
         /*
          * returns the "name" for the permission.
          *
@@ -77,6 +93,8 @@ return [
          * Note: If you are changing the "permission_name" , It's recommended to run with --clean to avoid duplications
          */
         'permission_name' => 'return $permissionAffix . \' \' . $modelName;',
+
+        'permission_name_label' => 'return $permissionAffixLabel . \' \' . $modelName;',
 
         /*
          * Permissions will be generated for the models associated with the respective Filament Resources

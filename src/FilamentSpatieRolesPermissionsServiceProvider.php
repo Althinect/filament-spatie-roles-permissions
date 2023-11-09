@@ -10,12 +10,14 @@ class FilamentSpatieRolesPermissionsServiceProvider extends PackageServiceProvid
 {
     public static string $name = 'filament-spatie-roles-permissions';
 
+
     public function configurePackage(Package $package): void
     {
         $package
             ->name('filament-spatie-roles-permissions')
             ->hasConfigFile()
             ->hasTranslations()
+            ->hasMigrations('update_permission_table')
             ->hasCommand(Permission::class);
     }
 }

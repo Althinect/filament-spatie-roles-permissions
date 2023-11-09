@@ -10,6 +10,7 @@ return [
     'field.guard_name' => 'Nome Guard',
     'field.permissions_count' => 'Numero di permessi',
     'field.name' => 'Nome',
+    'field.label' => 'Label',
     'field.permissions' => 'Permessi',
     'field.roles' => 'Ruoli',
     'field.role' => 'Ruolo',

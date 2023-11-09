@@ -10,6 +10,7 @@ return [
     'field.guard_name' => 'Koruma Adı',
     'field.permissions_count' => 'İzin Sayısı',
     'field.name' => 'İsim',
+    'field.label' => 'Label',
     'field.permissions' => 'İzinler',
     'field.roles' => 'Roller',
     'field.role' => 'Rol',

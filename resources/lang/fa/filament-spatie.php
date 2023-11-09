@@ -9,6 +9,7 @@ return [
 
     'field.guard_name' => 'نام گارد',
     'field.name' => 'نام',
+    'field.label' => 'Label',
     'field.permissions' => 'دسترسی‌ها',
     'field.roles' => 'نقش‌ها',
 
