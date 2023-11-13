@@ -122,15 +122,15 @@ class PermissionResource extends Resource
                 ]),
                 BulkAction::make('Attach to roles')
                     ->action(function (Collection $records, array $data): void {
-                        $records->each(function (Permission $permission) use ($data): void {
-                            $permission->syncRoles($data['roles']);
+                        Role::whereIn('id',$data['roles'])->each(function (Role $role) use ($records): void {
+                            $role->syncPermissions($records);
                         });
                     })
                     ->form([
                         Select::make('roles')
                             ->multiple()
                             ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
-                            ->options(Role::query()->pluck('name', 'name'))
+                            ->options(Role::query()->pluck('name', 'id'))
                             ->required(),
                     ])->deselectRecordsAfterCompletion(),
             ])
