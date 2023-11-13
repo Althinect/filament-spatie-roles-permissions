@@ -120,15 +120,15 @@ class PermissionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-                BulkAction::make('Attach Role')
+                BulkAction::make('Attach to roles')
                     ->action(function (Collection $records, array $data): void {
-                        foreach ($records as $record) {
-                            $record->roles()->sync($data['role']);
-                            $record->save();
-                        }
+                        $records->each(function (Permission $permission) use ($data): void {
+                            $permission->syncRoles($data['roles']);
+                        });
                     })
                     ->form([
-                        Select::make('role')
+                        Select::make('roles')
+                            ->multiple()
                             ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
                             ->options(Role::query()->pluck('name', 'id'))
                             ->required(),
