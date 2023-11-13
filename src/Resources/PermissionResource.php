@@ -130,7 +130,7 @@ class PermissionResource extends Resource
                         Select::make('roles')
                             ->multiple()
                             ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
-                            ->options(Role::query()->pluck('name', 'id'))
+                            ->options(Role::query()->pluck('name', 'name'))
                             ->required(),
                     ])->deselectRecordsAfterCompletion(),
             ])
