@@ -163,6 +163,7 @@ Gate::before(function (User $user, string $ability) {
 
 - Create a Role model which extends `Spatie\Permission\Models\Role`
 - Create a Permission model which extends `Spatie\Permission\Models\Permission`
+- Replace the models in the `config/permission.php` with the newly created models
 - Add the `team` relationship in both models
 
 ```php
