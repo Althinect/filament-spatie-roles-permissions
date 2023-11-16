@@ -95,6 +95,7 @@ class PermissionResource extends Resource
             ])
             ->filters([
                 Filter::make('models')
+                    ->label('Models')
                     ->form(function () {
                         $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
                         $models = $commands->getAllModels();
@@ -123,7 +124,7 @@ class PermissionResource extends Resource
                 BulkAction::make('Attach to roles')
                     ->action(function (Collection $records, array $data): void {
                         Role::whereIn('id',$data['roles'])->each(function (Role $role) use ($records): void {
-                            $role->syncPermissions($records);
+                            $records->chunk(50)->each(fn (Permission $permission) => $role->givePermissionTo($permission));
                         });
                     })
                     ->form([
