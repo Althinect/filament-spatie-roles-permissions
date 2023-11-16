@@ -124,7 +124,7 @@ class PermissionResource extends Resource
                 BulkAction::make('Attach to roles')
                     ->action(function (Collection $records, array $data): void {
                         Role::whereIn('id',$data['roles'])->each(function (Role $role) use ($records): void {
-                            $records->chunk(50)->each(fn (Permission $permission) => $role->givePermissionTo($permission));
+                            $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
                         });
                     })
                     ->form([
