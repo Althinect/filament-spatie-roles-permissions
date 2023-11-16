@@ -99,8 +99,7 @@ class RoleResource extends Resource
                 TextColumn::make('permissions_count')
                     ->counts('permissions')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions_count'))
-                    ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true))
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true)),
                 TextColumn::make('guard_name')
                     ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.roles.isToggledHiddenByDefault', true))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
