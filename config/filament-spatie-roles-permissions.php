@@ -38,6 +38,12 @@ return [
 
     'user_name_column' => 'name',
 
+    /** Icons to use for navigation */
+    'icons' => [
+        'role_navigation' => 'heroicon-o-lock-closed',
+        'permission_navigation' => 'heroicon-o-lock-closed',
+    ],
+
     'generator' => [
 
         'guard_names' => [
