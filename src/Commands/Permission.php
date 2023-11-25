@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Permission as PermissionModel;
 
 class Permission extends Command
 {
-    private $config;
+    private mixed $config;
 
     private array $permissions = [];
 
