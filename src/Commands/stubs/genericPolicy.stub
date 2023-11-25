@@ -13,7 +13,7 @@ class {{ class }}
      */
     public function viewAny({{ user }} $user): bool
     {
-        return $user->can('{{ viewAnyPermission }}');
+        return $user->hasPermissionTo('{{ viewAnyPermission }}');
     }
 
     /**
@@ -21,7 +21,7 @@ class {{ class }}
      */
     public function view({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        return $user->can('{{ viewPermission }}');
+        return $user->hasPermissionTo('{{ viewPermission }}');
     }
 
     /**
@@ -29,7 +29,7 @@ class {{ class }}
      */
     public function create({{ user }} $user): bool
     {
-        return $user->can('{{ createPermission }}');
+        return $user->hasPermissionTo('{{ createPermission }}');
     }
 
     /**
@@ -37,7 +37,7 @@ class {{ class }}
      */
     public function update({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        return $user->can('{{ updatePermission }}');
+        return $user->hasPermissionTo('{{ updatePermission }}');
     }
 
     /**
@@ -45,7 +45,7 @@ class {{ class }}
      */
     public function delete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        return $user->can('{{ deletePermission }}');
+        return $user->hasPermissionTo('{{ deletePermission }}');
     }
 
     /**
@@ -53,7 +53,7 @@ class {{ class }}
      */
     public function restore({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        return $user->can('{{ restorePermission }}');
+        return $user->hasPermissionTo('{{ restorePermission }}');
     }
 
     /**
@@ -61,6 +61,6 @@ class {{ class }}
      */
     public function forceDelete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        return $user->can('{{ forceDeletePermission }}');
+        return $user->hasPermissionTo('{{ forceDeletePermission }}');
     }
 }
