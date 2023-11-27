@@ -38,9 +38,7 @@ return [
 
     'user_name_column' => 'name',
 
-    /*
-     * Icons to use for navigation
-     */
+    /** Icons to use for navigation */
     'icons' => [
         'role_navigation' => 'heroicon-o-lock-closed',
         'permission_navigation' => 'heroicon-o-lock-closed',
@@ -100,14 +98,14 @@ return [
         ],
 
         /*
-         * Define custom_models
+         * Define custom_models in snake-case
          */
         'custom_models' => [
             //
         ],
 
         /*
-         * Define excluded_models
+         * Define excluded_models in snake-case
          */
         'excluded_models' => [
             //
@@ -118,7 +116,7 @@ return [
         ],
 
         /*
-         * Define any other permission that should be synced with the DB
+         * Define any other permission here
          */
         'custom_permissions' => [
             //'view-log'
