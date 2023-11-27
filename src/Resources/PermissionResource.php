@@ -7,6 +7,7 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ListPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -26,6 +27,8 @@ use Spatie\Permission\Models\Role;
 
 class PermissionResource extends Resource
 {
+    protected static bool $isScopedToTenant = false;
+
     public static function getNavigationIcon(): ?string
     {
         return  config('filament-spatie-roles-permissions.icons.permission_navigation');
@@ -74,7 +77,16 @@ class PermissionResource extends Resource
                             Select::make('roles')
                                 ->multiple()
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.roles'))
-                                ->relationship('roles', 'name')
+                                ->relationship(
+                                    name: 'roles',
+                                    titleAttribute: 'name',
+                                    modifyQueryUsing: function(Builder $query) {
+                                        if(Filament::hasTenancy()) {
+                                            return $query->where(config('permission.team_foreign_key'), Filament::getTenant());
+                                        }
+                                        return $query;
+                                    }
+                                )
                                 ->preload(config('filament-spatie-roles-permissions.preload_roles', true)),
                         ]),
                     ]),
