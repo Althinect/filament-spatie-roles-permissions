@@ -4,6 +4,7 @@ namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditRole extends EditRecord
@@ -13,6 +14,7 @@ class EditRole extends EditRecord
     public function getHeaderActions(): array
     {
         return [
+            ViewAction::make(),
             DeleteAction::make(),
         ];
     }
