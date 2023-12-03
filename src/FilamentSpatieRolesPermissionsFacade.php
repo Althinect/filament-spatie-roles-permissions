@@ -4,9 +4,6 @@ namespace Althinect\FilamentSpatieRolesPermissions;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Althinect\FilamentSpatieRolesPermissions\Skeleton\SkeletonClass
- */
 class FilamentSpatieRolesPermissionsFacade extends Facade
 {
     /**
@@ -14,7 +11,7 @@ class FilamentSpatieRolesPermissionsFacade extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'filament-spatie-roles-permissions';
     }
