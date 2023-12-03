@@ -22,7 +22,6 @@ use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
-    protected static ?string $model = Role::class;
 
     public static function getNavigationIcon(): ?string
     {
@@ -71,6 +70,7 @@ class RoleResource extends Resource
                                     ->default(config('filament-spatie-roles-permissions.default_guard_name'))
                                     ->required(),
                                 Select::make('permissions')
+                                    ->columnSpanFull()
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship('permissions', 'name')
