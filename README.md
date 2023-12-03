@@ -152,6 +152,23 @@ Gate::before(function (User $user, string $ability) {
 });
 ```
 
+### Guard Names
+When you use any guard other than `web` you have to add the guard name to the `config/auth.php` file.
+Example: If you use `api` guard, you should add the following to the `guards` array
+
+```php
+
+'guards' => [
+    ...
+
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+        'hash' => false,
+    ],
+],
+```
+
 ### Tenancy
 
 - Make sure to set the following on the `config/permission.php`
