@@ -85,7 +85,6 @@ class RoleResource extends Resource
                                     ->searchable(['name', 'guard_name']) // searchable on both name and guard_name
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
 
-
                                 Select::make(config('permission.column_names.team_foreign_key', 'team_id'))
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
                                     ->hidden(fn () => ! config('permission.teams', false) || Filament::hasTenancy())
