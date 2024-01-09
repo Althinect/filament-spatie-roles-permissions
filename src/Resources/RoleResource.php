@@ -19,7 +19,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -83,7 +82,7 @@ class RoleResource extends Resource
                                         modifyQueryUsing: fn (Builder $query) => $query->orderBy('name')->orderBy('name'),
                                     )
                                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->guard_name})")
-                                    ->searchable(['name', 'guard_name'])
+                                    ->searchable(['name', 'guard_name']) // searchable on both name and guard_name
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
 
 
