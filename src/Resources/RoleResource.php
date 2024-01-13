@@ -19,6 +19,8 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class RoleResource extends Resource
 {
@@ -64,17 +66,25 @@ class RoleResource extends Resource
                                 TextInput::make('name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
                                     ->required(),
+
                                 Select::make('guard_name')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                     ->options(config('filament-spatie-roles-permissions.guard_names'))
                                     ->default(config('filament-spatie-roles-permissions.default_guard_name'))
                                     ->required(),
+
                                 Select::make('permissions')
                                     ->columnSpanFull()
                                     ->multiple()
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
-                                    ->relationship('permissions', 'name')
+                                    ->relationship(
+                                        name: 'permissions',
+                                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('name')->orderBy('name'),
+                                    )
+                                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->guard_name})")
+                                    ->searchable(['name', 'guard_name']) // searchable on both name and guard_name
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
+
                                 Select::make(config('permission.column_names.team_foreign_key', 'team_id'))
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.team'))
                                     ->hidden(fn () => ! config('permission.teams', false) || Filament::hasTenancy())
