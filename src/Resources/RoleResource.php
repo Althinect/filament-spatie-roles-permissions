@@ -50,6 +50,11 @@ class RoleResource extends Resource
         return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
     }
 
+    public static function getNavigationSort(): ?int
+    {
+        return  config('filament-spatie-roles-permissions.sort.role_navigation');
+    }
+
     public static function getPluralLabel(): string
     {
         return __('filament-spatie-roles-permissions::filament-spatie.section.roles');

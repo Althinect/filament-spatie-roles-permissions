@@ -46,6 +46,15 @@ return [
         'permission_navigation' => 'heroicon-o-lock-closed',
     ],
 
+    /*
+     *  Navigation items order - int value, false  restores the default position
+     */
+
+    'sort' => [
+        'role_navigation' => false,
+        'permission_navigation' => false
+    ],
+
     'generator' => [
 
         'guard_names' => [
