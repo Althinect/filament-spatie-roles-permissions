@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
-use Spatie\Permission\Models\Permission as PermissionModel;
 
 class Permission extends Command
 {
@@ -20,8 +19,8 @@ class Permission extends Command
 
     private array $policies = [];
 
-    protected $signature = 'permissions:sync 
-                                {--C|clean} 
+    protected $signature = 'permissions:sync
+                                {--C|clean}
                                 {--P|policies}
                                 {--O|oep}
                                 {--Y|yes-to-all}';
@@ -32,6 +31,7 @@ class Permission extends Command
     {
         parent::__construct();
         $this->config = config('filament-spatie-roles-permissions.generator');
+
     }
 
     /**
@@ -50,9 +50,11 @@ class Permission extends Command
 
         $this->prepareCustomPermissions();
 
+        $permissionModel = config('permission.models.permission');
+
         foreach ($this->permissions as $permission) {
             $this->comment('Syncing Permission for: '.$permission['name']);
-            PermissionModel::firstOrCreate($permission);
+            $permissionModel::firstOrCreate($permission);
         }
     }
 
