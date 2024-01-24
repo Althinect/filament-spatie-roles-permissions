@@ -176,11 +176,9 @@ Example: If you use `api` guard, you should add the following to the `guards` ar
 'teams' => true
 ```
 
-- Make sure the `team_model` on the `config/filament-spatie-roles-permissions` is correctly set.
-
+- Make sure the `team_model` on the `config/permission` is correctly set.
 - Create a Role model which extends `Spatie\Permission\Models\Role`
-- Create a Permission model which extends `Spatie\Permission\Models\Permission`
-- Replace the models in the `config/permission.php` with the newly created models
+- Replace the model in the `config/permission.php` with the newly created models
 - Add the `team` relationship in both models
 
 ```php
@@ -192,7 +190,6 @@ public function team(): BelongsTo
 ```
 - Add the following to the `AdminPanelProvider` to support tenancy
 
-Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
 
 ```php
 use Althinect\FilamentSpatieRolesPermissions\Middleware\SyncSpatiePermissionsWithFilamentTenants;
@@ -203,6 +200,8 @@ $panel
         SyncSpatiePermissionsWithFilamentTenants::class,
     ], isPersistent: true)
 ```
+
+Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
 
 ### Configurations
 
