@@ -232,15 +232,14 @@ class Permission extends Command
         }, $array);
     }
 
-    private function extractNamespace($file)
+    private function extractNamespace($file): string
     {
-
         $ns = null;
         $handle = fopen($file, 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 if (preg_match('/^namespace\s+([a-zA-Z0-9\\_]+);/', $line, $matches)) {
-                    $namespace = $matches[1];
+                    $ns = $matches[1];
                     break;
                 }
             }
