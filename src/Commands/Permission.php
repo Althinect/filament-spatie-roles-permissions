@@ -239,10 +239,8 @@ class Permission extends Command
         $handle = fopen($file, 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
-                $line = str($line)->remove('<?php')->remove('<?')->trim();
-                if (str_starts_with($line, 'namespace')) {
-                    $parts = explode(' ', $line);
-                    $ns = rtrim(trim($parts[1]), ';');
+                if (preg_match('/^namespace\s+([a-zA-Z0-9\\_]+);/', $line, $matches)) {
+                    $namespace = $matches[1];
                     break;
                 }
             }
