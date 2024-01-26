@@ -243,6 +243,10 @@ class Permission extends Command
                 if (str_starts_with($line, 'namespace')) {
                     $parts = explode(' ', $line);
                     $ns = rtrim(trim($parts[1]), ';');
+                    // it removes 6 characters from $ns variable
+                    if (str_ends_with($ns, 'use')){
+                        $ns = substr($ns, 0, strlen($ns) - 6);
+                    }
                     break;
                 }
             }
