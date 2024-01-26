@@ -238,7 +238,7 @@ class Permission extends Command
         $handle = fopen($file, 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
-                if (preg_match('/^namespace\s+([a-zA-Z0-9\\_]+);/', $line, $matches)) {
+                if (preg_match('/namespace\s+([a-zA-Z0-9_\\\\]+);/', $line, $matches)) {
                     $ns = $matches[1];
                     break;
                 }
