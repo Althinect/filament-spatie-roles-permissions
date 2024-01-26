@@ -234,7 +234,7 @@ class Permission extends Command
 
     private function extractNamespace($file): string
     {
-        $ns = null;
+        $ns = '';
         $handle = fopen($file, 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
