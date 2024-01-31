@@ -14,6 +14,8 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
@@ -78,6 +80,8 @@ class PermissionResource extends Resource
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                 ->options(config('filament-spatie-roles-permissions.guard_names'))
                                 ->default(config('filament-spatie-roles-permissions.default_guard_name'))
+                                ->live()
+                                ->afterStateUpdated(fn (Set $set) => $set('roles', null))
                                 ->required(),
                             Select::make('roles')
                                 ->multiple()
@@ -85,7 +89,10 @@ class PermissionResource extends Resource
                                 ->relationship(
                                     name: 'roles',
                                     titleAttribute: 'name',
-                                    modifyQueryUsing: function(Builder $query) {
+                                    modifyQueryUsing: function(Builder $query, Get $get) {
+                                        if (!empty($get('guard_name'))) {
+                                            $query->where('guard_name', $get('guard_name'));
+                                        }
                                         if(Filament::hasTenancy()) {
                                             return $query->where(config('permission.column_names.team_foreign_key'), Filament::getTenant());
                                         }
