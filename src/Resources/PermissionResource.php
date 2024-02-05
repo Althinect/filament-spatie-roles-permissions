@@ -8,7 +8,6 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -20,7 +19,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -121,24 +120,35 @@ class PermissionResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                Filter::make('models')
+                SelectFilter::make('models')
                     ->label('Models')
-                    ->form(function () {
+                    ->multiple()
+                    ->options(function () {
                         $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
+
+                        /** @var \ReflectionClass[] */
                         $models = $commands->getAllModels();
 
-                        return array_map(function (\ReflectionClass $model) {
-                            return Checkbox::make($model->getShortName());
-                        }, $models);
+                        $options = [];
+
+                        foreach ($models as $model) {
+                            $options[$model->getShortName()] = $model->getShortName();
+                        }
+
+                        return $options;
                     })
                     ->query(function (Builder $query, array $data) {
-                        return $query->where(function (Builder $query) use ($data) {
-                            foreach ($data as $key => $value) {
-                                if ($value) {
-                                    $query->orWhere('name', 'like', eval(config('filament-spatie-roles-permissions.model_filter_key')));
+                        if (isset($data['values'])) {
+                            $query->where(function (Builder $query) use ($data) {
+                                foreach ($data['values'] as $key => $value) {
+                                    if ($value) {
+                                        $query->orWhere('name', 'like', eval(config('filament-spatie-roles-permissions.model_filter_key')));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+
+                        return $query;
                     }),
             ])->actions([
                 Tables\Actions\EditAction::make(),
@@ -150,7 +160,7 @@ class PermissionResource extends Resource
                 ]),
                 BulkAction::make('Attach to roles')
                     ->action(function (Collection $records, array $data): void {
-                        Role::whereIn('id',$data['roles'])->each(function (Role $role) use ($records): void {
+                        Role::whereIn('id', $data['roles'])->each(function (Role $role) use ($records): void {
                             $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
                         });
                     })
