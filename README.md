@@ -201,6 +201,19 @@ $panel
     ], isPersistent: true)
 ```
 
+- Use the following within you UserResource
+
+```
+Forms\Components\Select::make('roles')
+            ->relationship(name: 'roles', titleAttribute: 'name')
+            ->saveRelationshipsUsing(function (Model $record, $state) {
+                 $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
+            })
+           ->multiple()
+           ->preload()
+           ->searchable(),
+```
+
 Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
 
 ### Configurations
