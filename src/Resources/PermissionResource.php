@@ -94,7 +94,7 @@ class PermissionResource extends Resource
                                             $query->where('guard_name', $get('guard_name'));
                                         }
                                         if(Filament::hasTenancy()) {
-                                            return $query->where(config('permission.column_names.team_foreign_key'), Filament::getTenant());
+                                            return $query->where(config('permission.column_names.team_foreign_key'), Filament::getTenant()->id);
                                         }
                                         return $query;
                                     }
