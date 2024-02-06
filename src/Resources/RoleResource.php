@@ -25,7 +25,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoleResource extends Resource
 {
-
+    
+    
+    public static function isScopedToTenant(): bool
+    {
+        return config('filament-spatie-roles-permissions.scope_to_tenant', true);
+    }
+    
     public static function getNavigationIcon(): ?string
     {
         return  config('filament-spatie-roles-permissions.icons.role_navigation');
