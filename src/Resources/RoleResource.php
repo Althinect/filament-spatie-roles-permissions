@@ -111,7 +111,7 @@ class RoleResource extends Resource
                                     ->options(
                                         fn () => config('filament-spatie-roles-permissions.team_model', App\Models\Team::class)::pluck('name', 'id')
                                     )
-                                    ->dehydrated(fn ($state) => (int) $state <= 0)
+                                    ->dehydrated(fn ($state) => (int) $state > 0)
                                     ->placeholder(__('filament-spatie-roles-permissions::filament-spatie.select-team'))
                                     ->hint(__('filament-spatie-roles-permissions::filament-spatie.select-team-hint')),
                             ]),
