@@ -99,7 +99,7 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship(
                                         name: 'permissions',
-                                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('name')->orderBy('name'),
+                                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('name'),
                                     )
                                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->guard_name})")
                                     ->searchable(['name', 'guard_name']) // searchable on both name and guard_name
