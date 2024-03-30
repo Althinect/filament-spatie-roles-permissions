@@ -2,6 +2,11 @@
 
 return [
 
+    'resources' => [
+        'PermissionResource' => \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
+        'RoleResource' => \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
+    ],
+
     'preload_roles' => true,
 
     'preload_permissions' => true,
@@ -9,7 +14,7 @@ return [
     'navigation_section_group' => 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions', // Default uses language constant
 
     'team_model' => \App\Models\Team::class,
-    
+
     'scope_to_tenant' => true,
 
     /*
