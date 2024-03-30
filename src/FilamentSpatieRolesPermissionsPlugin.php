@@ -2,8 +2,6 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions;
 
-use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
-use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -17,10 +15,9 @@ class FilamentSpatieRolesPermissionsPlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel
-            ->resources([
-                RoleResource::class,
-                PermissionResource::class,
-            ]);
+            ->resources(
+                config('filament-spatie-roles-permissions.resources')
+            );
     }
 
     public static function make(): static
