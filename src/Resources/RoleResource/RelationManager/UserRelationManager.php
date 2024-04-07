@@ -15,7 +15,10 @@ class UserRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
 
-    protected static ?string $recordTitleAttribute = 'name';
+    public static function getRecordTitleAttribute(): ?string
+    {
+        return config('filament-spatie-roles-permissions.user_name_column');
+    }
 
     /*
      * Support changing tab title in RelationManager.
