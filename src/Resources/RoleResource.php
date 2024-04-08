@@ -67,6 +67,11 @@ class RoleResource extends Resource
         return __('filament-spatie-roles-permissions::filament-spatie.section.roles');
     }
 
+    public static function getCluster(): ?string
+    {
+        return config('filament-spatie-roles-permissions.clusters.roles', null);
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -25,6 +25,15 @@ return [
         'roles' => true,
     ],
 
+    /*
+     * If you want to place the Resource in a Cluster, then set the required Cluster class.
+     * Eg. \App\Filament\Clusters\Cluster::class
+     */
+    'clusters' => [
+        'permissions' => null,
+        'roles' => null,
+    ],
+
     'guard_names' => [
         'web' => 'web',
         'api' => 'api',
