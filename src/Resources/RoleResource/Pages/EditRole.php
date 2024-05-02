@@ -18,4 +18,11 @@ class EditRole extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return config('filament-spatie-roles-permissions.should_redirect_to_index.roles.after_edit')
+            ? RoleResource::getUrl('index')
+            : RoleResource::getUrl('view');
+    }
 }
