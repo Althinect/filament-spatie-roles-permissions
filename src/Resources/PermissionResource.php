@@ -84,6 +84,7 @@ class PermissionResource extends Resource
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                 ->options(config('filament-spatie-roles-permissions.guard_names'))
                                 ->default(config('filament-spatie-roles-permissions.default_guard_name'))
+                                ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true))
                                 ->live()
                                 ->afterStateUpdated(fn (Set $set) => $set('roles', null))
                                 ->required(),
@@ -122,7 +123,8 @@ class PermissionResource extends Resource
                 TextColumn::make('guard_name')
                     ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.permissions.isToggledHiddenByDefault', true))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
-                    ->searchable(),
+                    ->searchable()
+                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true)),
             ])
             ->filters([
                 SelectFilter::make('models')

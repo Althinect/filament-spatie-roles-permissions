@@ -47,7 +47,8 @@ class PermissionRelationManager extends RelationManager
                 TextInput::make('name')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                 TextInput::make('guard_name')
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true)),
             ]);
     }
 
@@ -62,7 +63,8 @@ class PermissionRelationManager extends RelationManager
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
                 TextColumn::make('guard_name')
                     ->searchable()
-                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name')),
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true)),
 
             ])
             ->filters([
