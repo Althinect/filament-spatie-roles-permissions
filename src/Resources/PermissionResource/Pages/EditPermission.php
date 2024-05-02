@@ -9,10 +9,12 @@ class EditPermission extends EditRecord
 {
     protected static string $resource = PermissionResource::class;
 
-    protected function getRedirectUrl(): string
+    protected function getRedirectUrl(): ?string
     {
-        return config('filament-spatie-roles-permissions.should_redirect_to_index.permissions.after_edit')
-            ? PermissionResource::getUrl('index')
-            : PermissionResource::getUrl('view');
+        $resource = static::getResource();
+
+        return config('filament-spatie-roles-permissions.should_redirect_to_index.permissions.after_edit', false)
+            ? $resource::getUrl('index')
+            : parent::getRedirectUrl();
     }
 }

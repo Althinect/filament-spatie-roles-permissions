@@ -19,10 +19,12 @@ class EditRole extends EditRecord
         ];
     }
 
-    protected function getRedirectUrl(): string
+    protected function getRedirectUrl(): ?string
     {
-        return config('filament-spatie-roles-permissions.should_redirect_to_index.roles.after_edit')
-            ? RoleResource::getUrl('index')
-            : RoleResource::getUrl('view');
+        $resource = static::getResource();
+
+        return config('filament-spatie-roles-permissions.should_redirect_to_index.roles.after_create', false)
+            ? $resource::getUrl('index')
+            : parent::getRedirectUrl();
     }
 }
