@@ -96,6 +96,7 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                     ->options(config('filament-spatie-roles-permissions.guard_names'))
                                     ->default(config('filament-spatie-roles-permissions.default_guard_name'))
+                                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true))
                                     ->required(),
 
                                 Select::make('permissions')
