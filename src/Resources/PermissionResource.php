@@ -157,6 +157,10 @@ class PermissionResource extends Resource
 
                         return $query;
                     }),
+                SelectFilter::make('guard_name')
+                    ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
+                    ->multiple()
+                    ->options(config('filament-spatie-roles-permissions.guard_names')),
             ])->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
