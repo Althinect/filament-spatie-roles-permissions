@@ -62,6 +62,13 @@ You can publish translations with:
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-translations"
 ```
 
+Don't forget to add the `HasRoles` trait to your User model.
+
+```php
+ // The User model requires this trait
+ use HasRoles;
+ ```
+
 ## Usage
 
 ### Form
