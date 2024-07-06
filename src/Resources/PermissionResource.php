@@ -7,6 +7,7 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ListPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
+use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\UserRelationManager;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
@@ -110,7 +111,8 @@ class PermissionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RoleRelationManager::class
+            RoleRelationManager::class,
+            UserRelationManager::class,
         ];
     }
 
