@@ -127,6 +127,7 @@ php artisan permissions:sync -O|--oep
 ### Role and Permission Policies
 Create a RolePolicy and PermissionPolicy if you wish to control the visibility of the resources on the navigation menu.
 Make sure to add them to the AuthServiceProvider. 
+> **ℹ️ Info:** *Laravel 11 removed `AuthServiceProvider`, so in this case we need to use `AppServiceProvider` instead.*
 
 ### Ignoring prompts
 You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
