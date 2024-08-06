@@ -183,9 +183,12 @@ class PermissionResource extends Resource
                             ->required(),
                     ])->deselectRecordsAfterCompletion(),
             ])
-            ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
-            ]);
+            ->emptyStateActions(
+                config('filament-spatie-roles-permissions.should_remove_empty_state_actions.permissions') ? [] :
+                    [
+                        Tables\Actions\CreateAction::make()
+                    ]
+            );
     }
 
     public static function getRelations(): array
@@ -197,6 +200,12 @@ class PermissionResource extends Resource
 
     public static function getPages(): array
     {
+        if (config('filament-spatie-roles-permissions.should_use_simple_modal_resource.permissions')) {
+            return [
+                'index' => ListPermissions::route('/'),
+            ];
+        }
+
         return [
             'index' => ListPermissions::route('/'),
             'create' => CreatePermission::route('/create'),
