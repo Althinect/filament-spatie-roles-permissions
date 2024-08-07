@@ -25,6 +25,22 @@ return [
         'roles' => true,
     ],
 
+    /*
+     * Set as true to use simple modal resource.
+     */
+    'should_use_simple_modal_resource' => [
+        'permissions' => false,
+        'roles' => false,
+    ],
+
+    /*
+     * Set as true to remove empty state actions.
+     */
+    'should_remove_empty_state_actions' => [
+        'permissions' => false,
+        'roles' => false,
+    ],
+
     /**
      * Set to true to redirect to the resource index instead of the view
      */

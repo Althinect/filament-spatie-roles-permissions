@@ -156,9 +156,12 @@ class RoleResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
-            ]);
+            ->emptyStateActions(
+                config('filament-spatie-roles-permissions.should_remove_empty_state_actions.roles') ? [] :
+                    [
+                        Tables\Actions\CreateAction::make()
+                    ]
+            );
     }
 
     public static function getRelations(): array
@@ -171,6 +174,12 @@ class RoleResource extends Resource
 
     public static function getPages(): array
     {
+        if (config('filament-spatie-roles-permissions.should_use_simple_modal_resource.roles')) {
+            return [
+                'index' => ListRoles::route('/'),
+            ];
+        }
+
         return [
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
