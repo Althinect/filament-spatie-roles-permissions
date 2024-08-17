@@ -107,6 +107,7 @@ class RoleResource extends Resource
                                         name: 'permissions',
                                         modifyQueryUsing: fn (Builder $query) => $query->orderBy('name'),
                                     )
+                                    ->visible(config('filament-spatie-roles-permissions.should_show_permissions_for_roles'))
                                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->guard_name})")
                                     ->searchable(['name', 'guard_name']) // searchable on both name and guard_name
                                     ->preload(config('filament-spatie-roles-permissions.preload_permissions')),
