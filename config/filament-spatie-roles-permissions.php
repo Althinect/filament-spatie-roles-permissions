@@ -124,17 +124,13 @@ return [
             'createPermission' => 'create',
             'updatePermission' => 'update',
             'deletePermission' => 'delete',
+            'deleteAnyPermission' => 'delete-any',
+            'replicatePermission' => 'replicate',
             'restorePermission' => 'restore',
+            'restoreAnyPermission' => 'restore-any',
+            'reorderPermission' => 'reorder',
             'forceDeletePermission' => 'force-delete',
-
-            /*
-             * Additional Resource Permissions
-             */
-            'deleteAny',
-            'forceDeleteAny',
-            'reorder',
-            'replicate',
-            'restoreAny',
+            'forceDeleteAnyPermission' => 'force-delete-any',
         ],
 
         /*
