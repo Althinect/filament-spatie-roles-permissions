@@ -26,7 +26,7 @@ return [
     ],
 
     'should_show_permissions_for_roles' => true,
-    
+
     /*
      * Set as true to use simple modal resource.
      */
@@ -130,8 +130,11 @@ return [
             /*
              * Additional Resource Permissions
              */
-            'replicate',
+            'deleteAny',
+            'forceDeleteAny',
             'reorder',
+            'replicate',
+            'restoreAny',
         ],
 
         /*
