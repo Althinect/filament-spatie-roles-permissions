@@ -125,9 +125,20 @@ php artisan permissions:sync -O|--oep
 ```
 
 ### Role and Permission Policies
+
 Create a RolePolicy and PermissionPolicy if you wish to control the visibility of the resources on the navigation menu.
-Make sure to add them to the AuthServiceProvider. 
-> **ℹ️ Info:** *Laravel 11 removed `AuthServiceProvider`, so in this case we need to use `AppServiceProvider` instead.*
+Make sure to add them to the AuthServiceProvider.
+> **ℹ️ Info:** *Laravel 11 removed `AuthServiceProvider`, so, in this case, we need to use `AppServiceProvider` instead.*
+
+```bash
+use App\Policies\RolePolicy;
+use App\Policies\PermissionPolicy;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+Gate::policy(Role::class, RolePolicy::class);
+Gate::policy(Permission::class, PermissionPolicy::class);
+```
 
 ### Ignoring prompts
 You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
