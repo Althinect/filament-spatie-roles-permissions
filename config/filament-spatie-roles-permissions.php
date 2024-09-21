@@ -26,7 +26,7 @@ return [
     ],
 
     'should_show_permissions_for_roles' => true,
-    
+
     /*
      * Set as true to use simple modal resource.
      */
@@ -124,14 +124,13 @@ return [
             'createPermission' => 'create',
             'updatePermission' => 'update',
             'deletePermission' => 'delete',
+            'deleteAnyPermission' => 'delete-any',
+            'replicatePermission' => 'replicate',
             'restorePermission' => 'restore',
+            'restoreAnyPermission' => 'restore-any',
+            'reorderPermission' => 'reorder',
             'forceDeletePermission' => 'force-delete',
-
-            /*
-             * Additional Resource Permissions
-             */
-            'replicate',
-            'reorder',
+            'forceDeleteAnyPermission' => 'force-delete-any',
         ],
 
         /*
