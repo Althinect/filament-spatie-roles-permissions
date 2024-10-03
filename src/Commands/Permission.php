@@ -255,7 +255,8 @@ class Permission extends Command
     {
         $models = $this->getModels();
         $customModels = $this->getCustomModels();
+        $excludedModels = $this->getExcludedModels();
 
-        return array_merge($models, $customModels);
+        return array_diff(array_merge($models, $customModels), $excludedModels);
     }
 }
