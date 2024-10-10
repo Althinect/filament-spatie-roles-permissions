@@ -90,6 +90,23 @@ return [
     'user_name_column' => 'name',
 
     /*
+     * If user_name_column is an accessor from a model, then list columns to search.
+     * Default: null, will search by user_name_column
+     *
+     * Example:
+     *
+     * 'user_name_searchable_columns' => ['first_name', 'last_name']
+     *
+     * and in your model:
+     *
+     * public function getFullNameAttribute() {
+     *    return $this->first_name . ' ' . $this->last_name;
+     * }
+     *
+     */
+    'user_name_searchable_columns' => null,
+
+    /*
      * Icons to use for navigation
      */
     'icons' => [
