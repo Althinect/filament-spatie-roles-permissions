@@ -258,7 +258,7 @@ class Permission extends Command
         return array_merge($models, $customModels);
     }
 
-        protected function getStub()
+    protected function getStub()
     {
         return $this->resolveStubPath('/stubs/genericPolicy.stub');
     }
