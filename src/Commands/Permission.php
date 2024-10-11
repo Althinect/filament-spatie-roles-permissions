@@ -87,8 +87,7 @@ class Permission extends Command
         foreach ($classes as $model) {
             $modelName = $model->getShortName();
 
-            $stub = '/stubs/genericPolicy.stub';
-            $contents = $filesystem->get(__DIR__.$stub);
+            $contents = $filesystem->get($this->getStub());
 
             foreach ($this->permissionAffixes() as $key => $permissionAffix) {
                 foreach ($this->guardNames() as $guardName) {
@@ -257,5 +256,17 @@ class Permission extends Command
         $customModels = $this->getCustomModels();
 
         return array_merge($models, $customModels);
+    }
+
+        protected function getStub()
+    {
+        return $this->resolveStubPath('/stubs/genericPolicy.stub');
+    }
+
+    protected function resolveStubPath($stub)
+    {
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.$stub;
     }
 }
