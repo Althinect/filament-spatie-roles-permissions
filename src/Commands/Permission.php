@@ -2,14 +2,15 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
+use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class Permission extends Command
 {
@@ -23,7 +24,8 @@ class Permission extends Command
                                 {--C|clean}
                                 {--P|policies}
                                 {--O|oep}
-                                {--Y|yes-to-all}';
+                                {--Y|yes-to-all}
+                                {--H|hard}';
 
     protected $description = 'Generates permissions through Models or Filament Resources and custom permissions';
 
@@ -31,7 +33,6 @@ class Permission extends Command
     {
         parent::__construct();
         $this->config = config('filament-spatie-roles-permissions.generator');
-
     }
 
     /**
@@ -44,7 +45,16 @@ class Permission extends Command
 
         $classes = array_diff($classes, $this->getExcludedModels());
 
-        $this->deleteExistingPermissions();
+        // Only attempt to delete existing permissions if a deletion option is passed
+        if ($this->option('hard') || $this->option('clean')) {
+            $deletionResult = $this->deleteExistingPermissions();
+            if (!$deletionResult) {
+                $this->line('<bg=yellow;options=bold;>*** OPERATION ABORTED ***</>');
+                $this->warn('No changes were made.');
+                $this->info('Consider running <bg=blue>php artisan permissions:sync</> if you just wish to sync without deleting.');
+                return;
+            }
+        }
 
         $this->prepareClassPermissionsAndPolicies($classes);
 
@@ -52,25 +62,48 @@ class Permission extends Command
 
         $permissionModel = config('permission.models.permission');
 
+        $count = 0;
+
         foreach ($this->permissions as $permission) {
-            $this->comment('Syncing Permission for: '.$permission['name']);
+            $this->comment('Syncing Permission for: ' . $permission['name']);
             $permissionModel::firstOrCreate($permission);
+            $count++;
         }
+
+        $this->info('<bg=green;options=bold;>DONE</>');
+        $this->info($count . ' permissions synced successfully.');
     }
 
-    public function deleteExistingPermissions(): void
+    public function deleteExistingPermissions(): bool
     {
-        if ($this->option('clean')) {
-            if ($this->option('yes-to-all') || $this->confirm('This will delete existing permissions. Do you want to continue?', false)) {
+        $permissionsTable = config('permission.table_names.permissions');
+
+        if ($this->option('hard')) {
+            if ($this->option('yes-to-all') || $this->confirm("This will delete all existing permissions AND truncate your {$permissionsTable} database. Do you want to continue?", false)) {
+                $this->comment('Deleting Permissions And Truncating');
+                try {
+                    Schema::disableForeignKeyConstraints();
+                    DB::table($permissionsTable)->truncate();
+                    Schema::enableForeignKeyConstraints();
+                    return true;
+                } catch (\Exception $exception) {
+                    $this->error($exception->getMessage());
+                    return false;
+                }
+            }
+        } elseif ($this->option('clean')) {
+            if ($this->option('yes-to-all') || $this->confirm('This will delete all existing permissions. Do you want to continue?', false)) {
                 $this->comment('Deleting Permissions');
                 try {
-                    DB::table(config('permission.table_names.permissions'))->delete();
-                    $this->comment('Deleted Permissions');
+                    DB::table($permissionsTable)->delete();
+                    return true;
                 } catch (\Exception $exception) {
-                    $this->warn($exception->getMessage());
+                    $this->error($exception->getMessage());
+                    return false;
                 }
             }
         }
+        return false;
     }
 
     /**
@@ -99,7 +132,7 @@ class Permission extends Command
                     ];
 
                     if ($this->option('policies')) {
-                        $contents = Str::replace('{{ '.$key.' }}', $permission, $contents);
+                        $contents = Str::replace('{{ ' . $key . ' }}', $permission, $contents);
                     }
                 }
             }
@@ -107,7 +140,7 @@ class Permission extends Command
             if ($this->option('policies') || $this->option('yes-to-all')) {
 
                 $policyVariables = [
-                    'class' => $modelName.'Policy',
+                    'class' => $modelName . 'Policy',
                     'namespacedModel' => $model->getName(),
                     'namespacedUserModel' => (new ReflectionClass($this->config['user_model']))->getName(),
                     'namespace' => $this->config['policies_namespace'],
@@ -120,20 +153,20 @@ class Permission extends Command
                     if ($modelName == 'User' && $search == 'namespacedModel') {
                         $contents = Str::replace('use {{ namespacedModel }};', '', $contents);
                     } else {
-                        $contents = Str::replace('{{ '.$search.' }}', $replace, $contents);
+                        $contents = Str::replace('{{ ' . $search . ' }}', $replace, $contents);
                     }
                 }
 
-                if ($filesystem->exists(app_path('Policies/'.$modelName.'Policy.php'))) {
+                if ($filesystem->exists(app_path('Policies/' . $modelName . 'Policy.php'))) {
                     if ($this->option('oep')) {
-                        $filesystem->put(app_path('Policies/'.$modelName.'Policy.php'), $contents);
-                        $this->comment('Overriding Existing Policy: '.$modelName);
+                        $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
+                        $this->comment('Overriding Existing Policy: ' . $modelName);
                     } else {
-                        $this->warn('Policy already exists for: '.$modelName);
+                        $this->warn('Policy already exists for: ' . $modelName);
                     }
                 } else {
-                    $filesystem->put(app_path('Policies/'.$modelName.'Policy.php'), $contents);
-                    $this->comment('Creating Policy: '.$modelName);
+                    $filesystem->put(app_path('Policies/' . $modelName . 'Policy.php'), $contents);
+                    $this->comment('Creating Policy: ' . $modelName);
                 }
             }
         }
@@ -163,12 +196,12 @@ class Permission extends Command
 
             foreach ($resources as $resource) {
                 $resourceNameSpace = $this->extractNamespace($resource);
-                $reflection = new ReflectionClass($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension());
+                $reflection = new ReflectionClass($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension());
                 if (
                     ! $reflection->isAbstract() && $reflection->getParentClass() &&
                     $reflection->getParentClass()->getName() == 'Filament\Resources\Resource'
                 ) {
-                    $models[] = new ReflectionClass(app($resourceNameSpace.'\\'.$resource->getFilenameWithoutExtension())->getModel());
+                    $models[] = new ReflectionClass(app($resourceNameSpace . '\\' . $resource->getFilenameWithoutExtension())->getModel());
                 }
             }
         }
@@ -190,12 +223,11 @@ class Permission extends Command
 
         foreach ($files as $file) {
             $namespace = $this->extractNamespace($file);
-            $class = $namespace.'\\'.$file->getFilenameWithoutExtension();
+            $class = $namespace . '\\' . $file->getFilenameWithoutExtension();
             $model = new ReflectionClass($class);
             if (! $model->isAbstract()) {
                 $models[] = $model;
             }
-
         }
 
         return $models;
@@ -268,6 +300,6 @@ class Permission extends Command
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.$stub;
+            : __DIR__ . $stub;
     }
 }
