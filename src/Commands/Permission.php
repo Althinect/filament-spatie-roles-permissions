@@ -49,7 +49,9 @@ class Permission extends Command
         if ($this->option('hard') || $this->option('clean')) {
             $deletionResult = $this->deleteExistingPermissions();
             if (!$deletionResult) {
-                $this->info('Operation aborted. No changes were made.');
+                $this->line('<bg=yellow;options=bold;>*** OPERATION ABORTED ***</>');
+                $this->warn('No changes were made.');
+                $this->info('Consider running <bg=blue>php artisan permissions:sync</> if you just wish to sync without deleting.');
                 return;
             }
         }
@@ -60,10 +62,16 @@ class Permission extends Command
 
         $permissionModel = config('permission.models.permission');
 
+        $count = 0;
+
         foreach ($this->permissions as $permission) {
             $this->comment('Syncing Permission for: ' . $permission['name']);
             $permissionModel::firstOrCreate($permission);
+            $count++;
         }
+
+        $this->info('<bg=green;options=bold;>DONE</>');
+        $this->info($count . ' permissions synced successfully.');
     }
 
     public function deleteExistingPermissions(): bool
@@ -71,13 +79,12 @@ class Permission extends Command
         $permissionsTable = config('permission.table_names.permissions');
 
         if ($this->option('hard')) {
-            if ($this->option('yes-to-all') || $this->confirm("This will delete all existing permissions AND truncate your {$permissionsTable} database! Do you want to continue?", false)) {
+            if ($this->option('yes-to-all') || $this->confirm("This will delete all existing permissions AND truncate your {$permissionsTable} database. Do you want to continue?", false)) {
                 $this->comment('Deleting Permissions And Truncating');
                 try {
                     Schema::disableForeignKeyConstraints();
                     DB::table($permissionsTable)->truncate();
                     Schema::enableForeignKeyConstraints();
-                    $this->info('Deleted Permissions And Truncated');
                     return true;
                 } catch (\Exception $exception) {
                     $this->error($exception->getMessage());
@@ -89,7 +96,6 @@ class Permission extends Command
                 $this->comment('Deleting Permissions');
                 try {
                     DB::table($permissionsTable)->delete();
-                    $this->info('Deleted Permissions');
                     return true;
                 } catch (\Exception $exception) {
                     $this->error($exception->getMessage());
