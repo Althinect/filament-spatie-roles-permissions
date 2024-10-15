@@ -96,6 +96,12 @@ This will not delete any existing permissions. However, if you want to delete al
 php artisan permissions:sync -C|--clean
 ```
 
+There may be an occassion where you wish to hard reset and truncate your existing permissions. To delete all permissions and reset the primary key, run
+
+```bash
+php artisan permissions:sync -H|--hard
+```
+
 #### Example: 
 If you have a **Post** model, it will generate the following permissions
 ```
