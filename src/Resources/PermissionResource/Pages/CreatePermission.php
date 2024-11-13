@@ -8,7 +8,12 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreatePermission extends CreateRecord
 {
-    protected static string $resource = PermissionResource::class;
+    protected static string $resource;
+
+    public function __construct()
+    {
+        self::$resource = config('filament-spatie-roles-permissions.resources.PermissionResource', PermissionResource::class);
+    }
 
     protected function getRedirectUrl(): string
     {

@@ -11,7 +11,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ListPermissions extends ListRecords
 {
-    protected static string $resource = PermissionResource::class;
+    protected static string $resource;
+
+    public function __construct()
+    {
+        self::$resource = config('filament-spatie-roles-permissions.resources.PermissionResource', PermissionResource::class);
+    }
 
     protected function getHeaderActions(): array
     {
@@ -39,6 +44,5 @@ class ListPermissions extends ListRecords
                         ->required(),
                 ])->deselectRecordsAfterCompletion(),
         ];
-
     }
 }

@@ -9,7 +9,12 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditRole extends EditRecord
 {
-    protected static string $resource = RoleResource::class;
+    protected static string $resource;
+
+    public function __construct()
+    {
+        self::$resource = config('filament-spatie-roles-permissions.resources.RoleResource', RoleResource::class);
+    }
 
     public function getHeaderActions(): array
     {
