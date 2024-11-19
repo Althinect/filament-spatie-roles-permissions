@@ -57,6 +57,15 @@ return [
         ],
     ],
 
+    /**
+     * Set to true to display relation managers in the resources
+     */
+    'should_display_relation_managers' => [
+        'permissions' => true,
+        'users' => true,
+        'roles' => true,
+    ],
+
     /*
      * If you want to place the Resource in a Cluster, then set the required Cluster class.
      * Eg. \App\Filament\Clusters\Cluster::class
