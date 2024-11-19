@@ -196,7 +196,7 @@ class PermissionResource extends Resource
     {
         $relationManagers = [];
 
-        if (config('filament-spatie-roles-permissions.should_display_relation_managers.roles')) {
+        if (config('filament-spatie-roles-permissions.should_display_relation_managers.roles', true)) {
             $relationManagers[] = RoleRelationManager::class;
         }
 

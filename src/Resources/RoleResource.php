@@ -168,11 +168,11 @@ class RoleResource extends Resource
 
         $relationManagers = [];
 
-        if (config('filament-spatie-roles-permissions.should_display_relation_managers.permissions')) {
+        if (config('filament-spatie-roles-permissions.should_display_relation_managers.permissions', true)) {
             $relationManagers[] = PermissionRelationManager::class;
         }
 
-        if (config('filament-spatie-roles-permissions.should_display_relation_managers.users')) {
+        if (config('filament-spatie-roles-permissions.should_display_relation_managers.users', true)) {
             $relationManagers[] = UserRelationManager::class;
         }
 
