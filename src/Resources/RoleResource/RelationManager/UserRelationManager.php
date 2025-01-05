@@ -58,7 +58,7 @@ class UserRelationManager extends RelationManager
             ->columns([
                 TextColumn::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name'))
-                    ->searchable(config('filament-spatie-roles-permissions.user_name_searchable_columns', 'name')),
+                    ->searchable(config('filament-spatie-roles-permissions.user_name_searchable_columns', 'name') ?? true),
             ])
             ->filters([
 
