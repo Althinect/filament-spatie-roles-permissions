@@ -13,6 +13,6 @@ class FilamentSpatieRolesPermissionsFacade extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'filament-spatie-roles-permissions';
+        return 'FilamentSpatieRolesPermissions';
     }
 }
