@@ -10,6 +10,6 @@ trait HasSuperAdmin
 
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole('Super Admin');
+        return $this->hasRole(config('filament-spatie-roles-permissions.super_admin_role_name', 'Super Admin'));
     }
 }
