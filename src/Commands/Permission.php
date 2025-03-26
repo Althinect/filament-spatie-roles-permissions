@@ -139,18 +139,20 @@ class Permission extends Command
 
             if ($this->option('policies') || $this->option('yes-to-all')) {
 
+                $user = $this->config['user_model_class'];
+
                 $policyVariables = [
                     'class' => $modelName . 'Policy',
                     'namespacedModel' => $model->getName(),
                     'namespacedUserModel' => (new ReflectionClass($this->config['user_model']))->getName(),
                     'namespace' => $this->config['policies_namespace'],
-                    'user' => 'User',
+                    'user' => $user,
                     'model' => $modelName,
                     'modelVariable' => $modelName == 'User' ? 'model' : Str::lower($modelName),
                 ];
 
                 foreach ($policyVariables as $search => $replace) {
-                    if ($modelName == 'User' && $search == 'namespacedModel') {
+                    if ($modelName == $user && $search == 'namespacedModel') {
                         $contents = Str::replace('use {{ namespacedModel }};', '', $contents);
                     } else {
                         $contents = Str::replace('{{ ' . $search . ' }}', $replace, $contents);

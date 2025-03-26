@@ -213,6 +213,8 @@ return [
 
         'user_model' => \App\Models\User::class,
 
+        'user_model_class' => 'User',
+
         'policies_namespace' => 'App\Policies',
     ],
 ];
