@@ -15,7 +15,10 @@ return [
 
     'team_model' => \App\Models\Team::class,
 
-    'scope_to_tenant' => true,
+     'scope_to_tenant' => [
+        'roles' => true,
+        'permissions' => false,
+    ],
 
     'super_admin_role_name' => 'Super Admin',
 
