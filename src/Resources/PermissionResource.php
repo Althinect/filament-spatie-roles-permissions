@@ -30,7 +30,7 @@ class PermissionResource extends Resource
 {
     public static function isScopedToTenant(): bool
     {
-        return config('filament-spatie-roles-permissions.scope_to_tenant', true);
+        return config('filament-spatie-roles-permissions.scope_to_tenant.permissions', true);
     }   
 
     public static function getNavigationIcon(): ?string
