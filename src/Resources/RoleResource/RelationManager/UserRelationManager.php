@@ -3,8 +3,8 @@
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\RelationManager;
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
@@ -41,9 +41,9 @@ class UserRelationManager extends RelationManager
         return __('filament-spatie-roles-permissions::filament-spatie.section.users');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 TextInput::make(config('filament-spatie-roles-permissions.user_name_column'))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.name')),
