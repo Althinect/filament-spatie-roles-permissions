@@ -6,7 +6,7 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
 class ListPermissions extends ListRecords
