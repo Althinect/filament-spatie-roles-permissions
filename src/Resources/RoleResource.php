@@ -13,8 +13,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -25,8 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoleResource extends Resource
 {
-
-
     public static function isScopedToTenant(): bool
     {
         return config('filament-spatie-roles-permissions.scope_roles_to_tenant', config('filament-spatie-roles-permissions.scope_to_tenant', true));
@@ -72,9 +70,9 @@ class RoleResource extends Resource
         return config('filament-spatie-roles-permissions.clusters.roles', null);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Section::make()
                     ->schema([
