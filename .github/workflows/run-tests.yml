@@ -18,7 +18,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: ['8.3', '8.4', '8.5']
+        php: ['8.3', '8.4']
         laravel: ['11.*', '12.*']
         stability: [prefer-stable]
         include:
@@ -26,10 +26,6 @@ jobs:
             testbench: ^9.0
           - laravel: 12.*
             testbench: ^10.0
-        exclude:
-          # PHP 8.5 may have compatibility issues with prefer-lowest due to older dependency versions
-          - php: '8.5'
-            stability: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
