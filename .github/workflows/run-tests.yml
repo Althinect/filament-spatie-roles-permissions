@@ -27,9 +27,8 @@ jobs:
           - laravel: 12.*
             testbench: ^10.0
         exclude:
-          # PHP 8.5 may have compatibility issues with older Laravel 11 versions
+          # PHP 8.5 may have compatibility issues with prefer-lowest due to older dependency versions
           - php: '8.5'
-            laravel: '11.*'
             stability: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
