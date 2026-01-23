@@ -1,12 +1,14 @@
 name: run-tests
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+    push:
+      paths:
+        - '**.php'
+        - '.github/workflows/run-tests.yml'
+        - 'tests/**'
+        - 'pest.php'
+        - 'composer.json'
+        - 'composer.lock'
 
 jobs:
   test:
@@ -16,25 +18,14 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [7.4, 8.0, '8.2']
-        laravel: ['8.*', '11.*', '12.*']
-        stability: [prefer-lowest, prefer-stable]
+        php: ['8.3', '8.4']
+        laravel: ['11.*', '12.*']
+        stability: [prefer-stable]
         include:
-          - laravel: 8.*
-            testbench: ^6.6
           - laravel: 11.*
             testbench: ^9.0
           - laravel: 12.*
             testbench: ^10.0
-        exclude:
-          - laravel: 11.*
-            php: 7.4
-          - laravel: 11.*
-            php: 8.0
-          - laravel: 12.*
-            php: 7.4
-          - laravel: 12.*
-            php: 8.0
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -56,8 +47,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/pest
