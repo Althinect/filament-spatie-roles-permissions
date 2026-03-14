@@ -52,7 +52,17 @@ class RoleResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __(config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'));
+        $navigationGroup = config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
+
+        if ($navigationGroup instanceof \BackedEnum) {
+            return $navigationGroup->value;
+        }
+
+        if ($navigationGroup instanceof \UnitEnum) {
+            return $navigationGroup->name;
+        }
+
+        return __($navigationGroup);
     }
 
     public static function getNavigationSort(): ?int
