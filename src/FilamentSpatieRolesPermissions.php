@@ -2,7 +2,15 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions;
 
+use Althinect\FilamentSpatieRolesPermissions\Support\Config;
+
 class FilamentSpatieRolesPermissions
 {
-    // Build your next great package.
+    /**
+     * @return array<class-string>
+     */
+    public function resources(): array
+    {
+        return Config::resources();
+    }
 }

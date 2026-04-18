@@ -1,263 +1,214 @@
-# Description
+# Filament Spatie Roles Permissions
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 [![Total Downloads](https://img.shields.io/packagist/dt/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
-[![GitHub Actions](https://github.com/althinect/filament-spatie-roles-permissions/actions/workflows/main.yml/badge.svg)](https://github.com/Althinect/filament-spatie-roles-permissions)
 
-This plugin is built on top of [Spatie's Permission](https://spatie.be/docs/laravel-permission/v7/introduction) package. 
+`althinect/filament-spatie-roles-permissions` is a Filament 5 plugin for managing Spatie roles and permissions with:
 
-Provides Resources for Roles and Permissions
+- a modern role CRUD resource
+- an enum-first permissions resource
+- optional Filament tenancy integration for Spatie teams
+- `althinect/enum-permission` as a first-class dependency
 
-Permission and Policy generations
-- Check the ``config/filament-spatie-roles-permissions-config.php``
+This v4 rewrite is intentionally a new major-version foundation. It follows the newer kick-start conventions while keeping the package configurable and translation-friendly.
 
-Supports permissions for teams
-- Make sure the ``teams`` attribute in the ``config/permission.php`` file is set to ``true``
+## Requirements
 
-## Updating
-
-After performing a ```composer update```, run
-
-```php
-php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
-```
-***Note that your existing settings will be overriden***
-
-#### If you like our work Don't forget to STAR the project 
+- PHP 8.4+
+- Laravel 13+
+- Filament 5+
+- `spatie/laravel-permission` 6.x
+- `althinect/enum-permission` 1.x
 
 ## Installation
 
-You can install the package via composer:
+Install the package:
 
 ```bash
 composer require althinect/filament-spatie-roles-permissions
 ```
 
-Since the package depends on [Spatie's Permission](https://spatie.be/docs/laravel-permission/v7/introduction) package. You have to publish the migrations by running:
+Publish Spatie Permission's config and migrations if you have not already:
+
 ```bash
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
-Add the plugin to the `AdminPanelProvider`
-```php
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+Publish this package config:
 
-$panel
-    ...
-    ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
-
-```
-
-Now you should add any other configurations needed for the Spatie-Permission package.
-
-**Note:** This will override your existing config file.
-You can publish the config file of the package with:
 ```bash
-php artisan vendor:publish --tag="filament-spatie-roles-permissions-config" --force
+php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
 ```
 
-You can publish translations with:
+Publish translations if you want to override labels:
 
 ```bash
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-translations"
 ```
 
-Don't forget to add the `HasRoles` trait to your User model.
+Register the plugin on your Filament panel:
 
 ```php
- // The User model requires this trait
- use HasRoles;
- ```
-
-## Usage
-
-### Form
-
-You can add the following to your *form* method in your UserResource 
-
-```php
-return $form->schema([
-    Select::make('roles')->multiple()->relationship('roles', 'name')
-])
-```
-
-In addition to the field added to the **UserResource**. There will be 2 Resources published under *Roles and Permissions*. You can use these resources manage roles and permissions.
-
-### Generate Permissions
-
-You can generate Permissions by running
-```bash
-php artisan permissions:sync
-```
-
-This will not delete any existing permissions. However, if you want to delete all existing permissions, run
-
-```bash
-php artisan permissions:sync -C|--clean
-```
-
-There may be an occassion where you wish to hard reset and truncate your existing permissions. To delete all permissions and reset the primary key, run
-
-```bash
-php artisan permissions:sync -H|--hard
-```
-
-#### Example: 
-If you have a **Post** model, it will generate the following permissions
-```
-view-any Post
-view Post
-create Post
-update Post
-delete Post
-restore Post
-force-delete Post
-replicate Post
-reorder Post
-```
-
-### Generating Policies
-To generate policies use the command below. This won't replace any existing policies
-
-```bash
-php artisan permissions:sync -P|--policies
-```
-
-### Overriding existing Policies
-This will override existing policy classes
-
-```bash
-php artisan permissions:sync -O|--oep
-```
-
-### Role and Permission Policies
-
-Create a RolePolicy and PermissionPolicy if you wish to control the visibility of the resources on the navigation menu.
-Make sure to add them to the AuthServiceProvider.
-> **ℹ️ Info:** *Laravel 11 removed `AuthServiceProvider`, so, in this case, we need to use `AppServiceProvider` instead.*
-
-```bash
-use App\Policies\RolePolicy;
-use App\Policies\PermissionPolicy;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-Gate::policy(Role::class, RolePolicy::class);
-Gate::policy(Permission::class, PermissionPolicy::class);
-```
-
-### Ignoring prompts
-You can ignore any prompts by add the flag ``-Y`` or ``--yes-to-all`` 
-
-***Recommended only for new projects as it will replace Policy files***
-
-```bash
-php artisan permissions:sync -COPY
-```
-
-### Adding a Super Admin
-
-* Create a Role with the name `Super Admin` and assign the role to a User
-* Add the following trait to the User Model
-
-```php
-use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
-
-class User extends Authenticatable{
-
-...
-use HasSuperAdmin;
-```
-
-* In the `boot` method of the `AuthServiceProvider` add the following
-
-```php
-Gate::before(function (User $user, string $ability) {
-    return $user->isSuperAdmin() ? true: null;     
-});
-```
-
-### Guard Names
-When you use any guard other than `web` you have to add the guard name to the `config/auth.php` file.
-Example: If you use `api` guard, you should add the following to the `guards` array
-
-```php
-
-'guards' => [
-    ...
-
-    'api' => [
-        'driver' => 'token',
-        'provider' => 'users',
-        'hash' => false,
-    ],
-],
-```
-
-### Tenancy
-
-- Make sure to set the following on the `config/permission.php`
-```php
-'teams' => true
-```
-
-- Make sure the `team_model` on the `config/permission` is correctly set.
-- Create a Role model which extends `Spatie\Permission\Models\Role`
-- Replace the model in the `config/permission.php` with the newly created models
-- Add the `team` relationship in both models
-
-```php
-...
-public function team(): BelongsTo
-{
-    return $this->belongsTo(Team::class);
-}
-```
-- Add the following to the `AdminPanelProvider` to support tenancy
-
-
-```php
-use Althinect\FilamentSpatieRolesPermissions\Middleware\SyncSpatiePermissionsWithFilamentTenants;
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 
 $panel
-    ...
-    ->tenantMiddleware([
-        SyncSpatiePermissionsWithFilamentTenants::class,
-    ], isPersistent: true)
+    ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
 ```
 
-- Use the following within you UserResource
+Make sure your authenticatable model uses Spatie's `HasRoles` trait.
 
+## What v4 Does
+
+### Roles
+
+- full CRUD
+- guard-aware validation
+- grouped permission assignment
+- optional team selector when Spatie teams are enabled without an active Filament tenant
+
+### Permissions
+
+- list and view only by default
+- grouped by guard and permission group when the `group` column exists
+- bulk assignment to roles
+- guard labels sourced from `enum-permission` when available
+
+## Enum Permission
+
+This package now assumes `althinect/enum-permission` is part of the intended setup.
+
+It uses:
+
+- `config('enum-permission.guards')` as the preferred source for guard labels
+- the optional `group` column for permission grouping
+
+If `enum-permission` guard labels are not configured, the package falls back to `filament-spatie-roles-permissions.guards.fallback`.
+
+## Optional Tenancy
+
+Tenancy support is Filament-tenant aware and optional.
+
+If tenancy is disabled:
+
+- roles and permissions behave like a normal Spatie Permission setup
+
+If tenancy is enabled and `permission.teams` is also enabled:
+
+- the plugin syncs the current Filament tenant into Spatie's team context
+- role queries scope to the current tenant when configured
+- the team selector is hidden while a Filament tenant is active
+
+If Spatie teams are enabled but there is no active Filament tenant:
+
+- the role resource exposes a configurable team selector
+
+If you enable package tenancy while `permission.teams` is `false`, the plugin throws a clear configuration exception.
+
+## Configuration
+
+The package now uses a grouped config structure:
+
+```php
+return [
+    'resources' => [
+        'role' => \Althinect\FilamentSpatieRolesPermissions\Resources\Roles\RoleResource::class,
+        'permission' => \Althinect\FilamentSpatieRolesPermissions\Resources\Permissions\PermissionResource::class,
+    ],
+
+    'navigation' => [
+        'group' => 'filament-spatie-roles-permissions::filament-spatie.navigation.group',
+        'labels' => [
+            'role' => 'filament-spatie-roles-permissions::filament-spatie.resource.role.label',
+            'roles' => 'filament-spatie-roles-permissions::filament-spatie.resource.role.plural_label',
+            'permission' => 'filament-spatie-roles-permissions::filament-spatie.resource.permission.label',
+            'permissions' => 'filament-spatie-roles-permissions::filament-spatie.resource.permission.plural_label',
+        ],
+        'icons' => [
+            'role' => 'heroicon-o-shield-check',
+            'permission' => 'heroicon-o-key',
+        ],
+        'sort' => [
+            'role' => null,
+            'permission' => null,
+        ],
+        'register' => [
+            'role' => true,
+            'permission' => true,
+        ],
+    ],
+
+    'guards' => [
+        'fallback' => [
+            'web' => 'Web',
+        ],
+        'default' => 'web',
+        'show' => true,
+    ],
+
+    'roles' => [
+        'preload_permissions' => true,
+        'redirect_after_create' => 'view',
+        'redirect_after_edit' => 'view',
+        'relation_managers' => [
+            'permissions' => true,
+        ],
+    ],
+
+    'permissions' => [
+        'read_only' => true,
+        'preload_roles' => true,
+        'grouping' => [
+            'enabled' => true,
+            'default' => 'guard_name',
+        ],
+        'bulk_assignment' => true,
+        'relation_managers' => [
+            'roles' => false,
+        ],
+    ],
+
+    'teams' => [
+        'model' => null,
+        'ownership_relationship' => 'teams',
+        'title_attribute' => 'name',
+        'foreign_key' => null,
+    ],
+
+    'tenancy' => [
+        'enabled' => false,
+        'scope_to_current_tenant' => true,
+        'sync_team_context' => true,
+        'clear_permission_cache_on_tenant_switch' => true,
+    ],
+];
 ```
-Forms\Components\Select::make('roles')
-            ->relationship(name: 'roles', titleAttribute: 'name')
-            ->saveRelationshipsUsing(function (Model $record, $state) {
-                 $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
-            })
-           ->multiple()
-           ->preload()
-           ->searchable(),
+
+## Breaking Changes From Older Versions
+
+This rewrite intentionally removes the older generator-centric surface area.
+
+Removed:
+
+- `permissions:sync`
+- policy stub generation
+- the legacy `generator` config block
+- legacy flat config keys like `scope_to_tenant` and `scope_premissions_to_tenant`
+- older app-specific assumptions such as a default `App\Models\Team`
+
+Changed:
+
+- permissions are now enum-first and read-oriented
+- roles are the main editing surface
+- tenancy is optional, but when enabled it is aligned with Filament tenancy and Spatie teams
+
+## Testing
+
+Run the package tests with:
+
+```bash
+composer test
 ```
-
-Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
-
-### Configurations
-
-In the **filament-spatie-roles-permissions.php** config file, you can customize the permission generation
-
-## Security
-
-If you discover any security related issues, please create an issue.
-
-## Credits
-
--   [Althinect](https://github.com/Althinect/)
--   [Contributors](https://github.com/Althinect/filament-spatie-roles-permissions/graphs/contributors)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
+The MIT License (MIT). Please see [LICENSE.md](LICENSE.md) for more information.

@@ -1,41 +1,54 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Fields
-    |--------------------------------------------------------------------------
-    */
+    'navigation' => [
+        'group' => 'Access Control',
+    ],
 
-    'field.guard_name' => 'Guard Name',
-    'field.permissions_count' => 'Permissions Count',
-    'field.name' => 'Name',
-    'field.permissions' => 'Permissions',
-    'field.roles' => 'Roles',
-    'field.role' => 'Role',
-    'field.team' => 'Team',
-    'field.models' => 'Models',
+    'resource' => [
+        'role' => [
+            'label' => 'Role',
+            'plural_label' => 'Roles',
+        ],
+        'permission' => [
+            'label' => 'Permission',
+            'plural_label' => 'Permissions',
+        ],
+    ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Actions
-    |--------------------------------------------------------------------------
-    */
+    'section' => [
+        'role_details' => 'Role Details',
+        'permissions' => 'Permissions',
+    ],
 
-    'action.attach_to_roles' => 'Attach to roles',
+    'field' => [
+        'name' => 'Name',
+        'guard_name' => 'Guard Name',
+        'permissions' => 'Permissions',
+        'permission_name' => 'Permission Name',
+        'group' => 'Group',
+        'role' => 'Role',
+        'roles' => 'Roles',
+        'team' => 'Team',
+        'created_at' => 'Created At',
+    ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Labels
-    |--------------------------------------------------------------------------
-    */
+    'filter' => [
+        'guard_name' => 'Guard Name',
+        'group' => 'Group',
+        'team' => 'Team',
+    ],
 
-    'section.permission' => 'Permission',
-    'section.permissions' => 'Permissions',
-    'section.role' => 'Role',
-    'section.roles' => 'Roles',
-    'section.roles_and_permissions' => 'Roles and Permissions',
-    'select-team' => 'Select a Team',
-    'select-team-hint' => 'Leave blank for a global role',
-    'section.users' => 'Users',
+    'action' => [
+        'assign_permissions' => 'Assign permissions to role',
+    ],
+
+    'message' => [
+        'permissions_assigned' => 'Permissions assigned successfully.',
+        'guard_mismatch' => 'All selected permissions must use the same guard as the selected role.',
+    ],
+
+    'group' => [
+        'ungrouped' => 'Ungrouped',
+    ],
 ];

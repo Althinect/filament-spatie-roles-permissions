@@ -2,6 +2,9 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions;
 
+use Althinect\FilamentSpatieRolesPermissions\Middleware\SyncSpatiePermissionsWithFilamentTenants;
+use Althinect\FilamentSpatieRolesPermissions\Support\Config;
+use Althinect\FilamentSpatieRolesPermissions\Support\TenancySupport;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -14,10 +17,15 @@ class FilamentSpatieRolesPermissionsPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $panel
-            ->resources(
-                config('filament-spatie-roles-permissions.resources')
-            );
+        TenancySupport::ensureConfigurationIsValid();
+
+        $panel->resources(Config::resources());
+
+        if (TenancySupport::shouldSyncTeamContext()) {
+            $panel->tenantMiddleware([
+                SyncSpatiePermissionsWithFilamentTenants::class,
+            ], isPersistent: true);
+        }
     }
 
     public static function make(): static
@@ -27,6 +35,6 @@ class FilamentSpatieRolesPermissionsPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        TenancySupport::ensureConfigurationIsValid();
     }
 }

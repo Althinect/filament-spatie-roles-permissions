@@ -2,8 +2,8 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions\Middleware;
 
+use Althinect\FilamentSpatieRolesPermissions\Support\TenancySupport;
 use Closure;
-use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,11 +16,8 @@ class SyncSpatiePermissionsWithFilamentTenants
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $filament = Filament::getTenant()->id;
-        $spatie = getPermissionsTeamId();
-        if ($filament !== $spatie) {
-            setPermissionsTeamId($filament);
-        }
+        TenancySupport::ensureConfigurationIsValid();
+        TenancySupport::syncCurrentTenantTeamContext();
 
         return $next($request);
     }

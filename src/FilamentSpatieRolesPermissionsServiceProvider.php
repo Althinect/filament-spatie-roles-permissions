@@ -2,9 +2,11 @@
 
 namespace Althinect\FilamentSpatieRolesPermissions;
 
-use Althinect\FilamentSpatieRolesPermissions\Commands\Permission;
+use Filament\Events\TenantSet;
+use Illuminate\Support\Facades\Event;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\Permission\PermissionRegistrar;
 
 class FilamentSpatieRolesPermissionsServiceProvider extends PackageServiceProvider
 {
@@ -15,7 +17,26 @@ class FilamentSpatieRolesPermissionsServiceProvider extends PackageServiceProvid
         $package
             ->name('filament-spatie-roles-permissions')
             ->hasConfigFile()
-            ->hasTranslations()
-            ->hasCommand(Permission::class);
+            ->hasTranslations();
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton('FilamentSpatieRolesPermissions', FilamentSpatieRolesPermissions::class);
+    }
+
+    public function packageBooted(): void
+    {
+        Event::listen(TenantSet::class, function (): void {
+            if (! config('filament-spatie-roles-permissions.tenancy.enabled')) {
+                return;
+            }
+
+            if (! config('filament-spatie-roles-permissions.tenancy.clear_permission_cache_on_tenant_switch', true)) {
+                return;
+            }
+
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+        });
     }
 }
