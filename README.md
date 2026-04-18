@@ -3,16 +3,51 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 [![Total Downloads](https://img.shields.io/packagist/dt/althinect/filament-spatie-roles-permissions.svg?style=flat-square)](https://packagist.org/packages/althinect/filament-spatie-roles-permissions)
 
-`althinect/filament-spatie-roles-permissions` is a Filament 5 plugin for managing Spatie roles and permissions with:
+`althinect/filament-spatie-roles-permissions` is a Filament 5 plugin for managing Spatie roles and permissions in your admin panel.
 
-- a modern role CRUD resource
-- an enum-first permissions resource
-- optional Filament tenancy integration for Spatie teams
-- `althinect/enum-permission` as a first-class dependency
+It is intentionally focused on the Filament UI layer:
 
-This v4 rewrite is intentionally a new major-version foundation. It follows the newer kick-start conventions while keeping the package configurable and translation-friendly.
+- role management
+- permission browsing
+- attaching and detaching permissions from roles
+- bulk assigning permissions to roles
+- optional Filament tenancy integration through Spatie teams
 
-## Requirements
+Permission generation is no longer handled here.
+
+That responsibility now lives in the companion package [`althinect/enum-permission`](https://github.com/althinect/enum-permission), which keeps enum generation, syncing, and optional policy generation usable **without** pulling in Filament as a dependency.
+
+## Why there are two packages
+
+The package split is deliberate:
+
+- [`althinect/enum-permission`](https://github.com/althinect/enum-permission) handles permission enums, syncing, and optional policy generation.
+- `althinect/filament-spatie-roles-permissions` handles the Filament resources and admin experience.
+
+This means you can use the enum-based permission workflow in projects, packages, and services that do not use Filament at all.
+
+This plugin still depends on `althinect/enum-permission`, but only as the source of permission metadata and generation workflow — not as a bundled UI concern.
+
+## An opinionated approach to permissions
+
+> Important: this package ecosystem takes an opinionated approach to permission management.
+
+The core idea is that permissions should be tightly coupled to the system itself, not treated as loose strings that drift away from the codebase over time.
+
+Using enums makes permissions easier to define, discover, refactor, and reuse. It also makes them fit naturally into Laravel's authorization layer, especially when working with policies.
+
+In practice, that means permissions can become a first-class part of your application design instead of a parallel data structure that has to be remembered manually.
+
+This approach is especially useful when you want permissions to be used consistently across:
+
+- Laravel policies
+- authorization checks and gates
+- role and permission management UIs
+- refactoring and code review workflows
+
+It is not the only valid way to model permissions, but it is the path these packages are designed to support.
+
+## Compatibility
 
 - PHP 8.4+
 - Laravel 13+
@@ -20,18 +55,92 @@ This v4 rewrite is intentionally a new major-version foundation. It follows the 
 - `spatie/laravel-permission` 6.x
 - `althinect/enum-permission` 1.x
 
+## What this package does
+
+### Roles resource
+
+The roles resource is the primary editing surface.
+
+It provides:
+
+- list, create, view, and edit pages for roles
+- guard-aware uniqueness and validation
+- permission assignment when creating a role
+- permission management for existing roles via the relation manager
+- attach, detach, and bulk detach permission actions on existing roles
+- optional team selection when Spatie teams are enabled without an active Filament tenant
+
+### Permissions resource
+
+The permissions resource is intentionally read-focused.
+
+It provides:
+
+- list and view pages for permissions
+- grouping by guard name
+- optional grouping by permission `group`
+- bulk assignment of selected permissions to a role
+- guard-aware role selection labels such as `Admin (web)`
+
+This package does **not** create or sync permissions. It assumes your permissions already exist in the database, typically via `althinect/enum-permission`.
+
+### Guard-aware UI
+
+The plugin uses `enum-permission` as the preferred source for guard configuration.
+
+That affects:
+
+- guard labels shown in Filament
+- role and permission filtering
+- permission assignment validation
+- guard badge presentation
+
+If `enum-permission` is not configured yet, the plugin falls back to the local `guards.fallback` config values.
+
+### Optional tenancy integration
+
+If you use Spatie teams together with Filament tenancy, the plugin can:
+
+- sync the active Filament tenant into Spatie's team context
+- scope role queries to the current tenant
+- show a team selector when operating outside an active tenant
+- clear the permission cache when the tenant changes
+
+If tenancy is enabled in this package while `permission.teams` is disabled, the plugin fails fast with a clear configuration exception.
+
+## What this package no longer does
+
+This package no longer ships permission-generation commands.
+
+It does **not**:
+
+- generate permission enums
+- sync permissions to the database
+- generate policies
+- provide legacy permission sync commands
+
+If you need those features, use [`althinect/enum-permission`](https://github.com/althinect/enum-permission).
+
 ## Installation
 
-Install the package:
+Install the plugin:
 
 ```bash
 composer require althinect/filament-spatie-roles-permissions
 ```
 
-Publish Spatie Permission's config and migrations if you have not already:
+Installing this plugin also installs `althinect/enum-permission` as a dependency.
+
+If you have not already set up Spatie Permission, publish its config and migrations first:
 
 ```bash
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+
+Publish the `enum-permission` config so you can define your permission generation workflow:
+
+```bash
+php artisan vendor:publish --tag="enum-permission-config"
 ```
 
 Publish this package config:
@@ -40,13 +149,30 @@ Publish this package config:
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-config"
 ```
 
-Publish translations if you want to override labels:
+Publish translations if you want to customize labels:
 
 ```bash
 php artisan vendor:publish --tag="filament-spatie-roles-permissions-translations"
 ```
 
-Register the plugin on your Filament panel:
+Run your migrations:
+
+```bash
+php artisan migrate
+```
+
+Make sure your authenticatable model uses Spatie's `HasRoles` trait:
+
+```php
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use HasRoles;
+}
+```
+
+Register the plugin in your Filament panel:
 
 ```php
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
@@ -55,155 +181,78 @@ $panel
     ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
 ```
 
-Make sure your authenticatable model uses Spatie's `HasRoles` trait.
+## Permission generation lives in `enum-permission`
 
-## What v4 Does
+This plugin is fully dependent on `althinect/enum-permission` for permission generation and syncing.
 
-### Roles
+For convenience, the most common workflow looks like this:
 
-- full CRUD
-- guard-aware validation
-- grouped permission assignment
-- optional team selector when Spatie teams are enabled without an active Filament tenant
+```bash
+# Generate enums interactively or for a specific model
+php artisan permission:make
 
-### Permissions
+# Generate enums and policies
+php artisan permission:make Post --policy
 
-- list and view only by default
-- grouped by guard and permission group when the `group` column exists
-- bulk assignment to roles
-- guard labels sourced from `enum-permission` when available
-
-## Enum Permission
-
-This package now assumes `althinect/enum-permission` is part of the intended setup.
-
-It uses:
-
-- `config('enum-permission.guards')` as the preferred source for guard labels
-- the optional `group` column for permission grouping
-
-If `enum-permission` guard labels are not configured, the package falls back to `filament-spatie-roles-permissions.guards.fallback`.
-
-## Optional Tenancy
-
-Tenancy support is Filament-tenant aware and optional.
-
-If tenancy is disabled:
-
-- roles and permissions behave like a normal Spatie Permission setup
-
-If tenancy is enabled and `permission.teams` is also enabled:
-
-- the plugin syncs the current Filament tenant into Spatie's team context
-- role queries scope to the current tenant when configured
-- the team selector is hidden while a Filament tenant is active
-
-If Spatie teams are enabled but there is no active Filament tenant:
-
-- the role resource exposes a configurable team selector
-
-If you enable package tenancy while `permission.teams` is `false`, the plugin throws a clear configuration exception.
-
-## Configuration
-
-The package now uses a grouped config structure:
-
-```php
-return [
-    'resources' => [
-        'role' => \Althinect\FilamentSpatieRolesPermissions\Resources\Roles\RoleResource::class,
-        'permission' => \Althinect\FilamentSpatieRolesPermissions\Resources\Permissions\PermissionResource::class,
-    ],
-
-    'navigation' => [
-        'group' => 'filament-spatie-roles-permissions::filament-spatie.navigation.group',
-        'labels' => [
-            'role' => 'filament-spatie-roles-permissions::filament-spatie.resource.role.label',
-            'roles' => 'filament-spatie-roles-permissions::filament-spatie.resource.role.plural_label',
-            'permission' => 'filament-spatie-roles-permissions::filament-spatie.resource.permission.label',
-            'permissions' => 'filament-spatie-roles-permissions::filament-spatie.resource.permission.plural_label',
-        ],
-        'icons' => [
-            'role' => 'heroicon-o-shield-check',
-            'permission' => 'heroicon-o-key',
-        ],
-        'sort' => [
-            'role' => null,
-            'permission' => null,
-        ],
-        'register' => [
-            'role' => true,
-            'permission' => true,
-        ],
-    ],
-
-    'guards' => [
-        'fallback' => [
-            'web' => 'Web',
-        ],
-        'default' => 'web',
-        'show' => true,
-    ],
-
-    'roles' => [
-        'preload_permissions' => true,
-        'redirect_after_create' => 'view',
-        'redirect_after_edit' => 'view',
-        'relation_managers' => [
-            'permissions' => true,
-        ],
-    ],
-
-    'permissions' => [
-        'read_only' => true,
-        'preload_roles' => true,
-        'grouping' => [
-            'enabled' => true,
-            'default' => 'guard_name',
-        ],
-        'bulk_assignment' => true,
-        'relation_managers' => [
-            'roles' => false,
-        ],
-    ],
-
-    'teams' => [
-        'model' => null,
-        'ownership_relationship' => 'teams',
-        'title_attribute' => 'name',
-        'foreign_key' => null,
-    ],
-
-    'tenancy' => [
-        'enabled' => false,
-        'scope_to_current_tenant' => true,
-        'sync_team_context' => true,
-        'clear_permission_cache_on_tenant_switch' => true,
-    ],
-];
+# Sync enum-defined permissions to the database
+php artisan permission:sync
 ```
 
-## Breaking Changes From Older Versions
+After that, use this Filament plugin to:
 
-This rewrite intentionally removes the older generator-centric surface area.
+1. create and manage roles
+2. attach generated permissions to roles
+3. review permissions in the Filament UI
+4. bulk-assign permissions to roles from the permissions resource
 
-Removed:
+For the full generation workflow, command reference, and enum setup, see the [`althinect/enum-permission` README](https://github.com/althinect/enum-permission).
 
-- `permissions:sync`
-- policy stub generation
-- the legacy `generator` config block
-- legacy flat config keys like `scope_to_tenant` and `scope_premissions_to_tenant`
-- older app-specific assumptions such as a default `App\Models\Team`
+## Configuration overview
 
-Changed:
+The config file is organized into small, focused sections.
 
-- permissions are now enum-first and read-oriented
-- roles are the main editing surface
-- tenancy is optional, but when enabled it is aligned with Filament tenancy and Spatie teams
+| Section | Purpose | Examples |
+| --- | --- | --- |
+| `resources` | Override resource classes if needed | `role`, `permission` |
+| `navigation` | Control labels, grouping, icons, and registration | `group`, `labels`, `icons`, `register` |
+| `guards` | Configure fallback labels, badge colors, and defaults | `fallback`, `colors`, `default`, `show` |
+| `roles` | Tune role resource behavior | `preload_permissions`, `redirect_after_create`, `relation_managers` |
+| `permissions` | Tune permission resource behavior | `grouping`, `bulk_assignment`, `preload_roles` |
+| `teams` | Configure central team selection | `model`, `ownership_relationship`, `title_attribute`, `foreign_key` |
+| `tenancy` | Configure Filament tenancy integration | `enabled`, `scope_to_current_tenant`, `sync_team_context`, `clear_permission_cache_on_tenant_switch` |
+
+The published config file is the best source of truth for the available options:
+
+`config/filament-spatie-roles-permissions.php`
+
+## Upgrade notes for older versions
+
+If you are upgrading from an older release of this package, the biggest change is the package split.
+
+### Removed from this package
+
+- legacy permission sync commands
+- policy generation logic
+- generator-focused config
+- older flat config structure
+
+### Moved to `enum-permission`
+
+- permission enum generation
+- permission syncing
+- optional policy generation
+
+### Why this matters
+
+The old workflow mixed Filament concerns with permission generation.
+
+The new split keeps this package focused on Filament UI while `enum-permission` stays reusable in projects that want enum-based permissions but do not use Filament.
+
+If you previously relied on an old command from this package, switch to the `enum-permission` workflow instead.
 
 ## Testing
 
-Run the package tests with:
+Run the test suite with:
 
 ```bash
 composer test
