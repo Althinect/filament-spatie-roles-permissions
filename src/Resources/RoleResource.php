@@ -120,7 +120,7 @@ class RoleResource extends Resource
                                     ->placeholder(__('filament-spatie-roles-permissions::filament-spatie.select-team'))
                                     ->hint(__('filament-spatie-roles-permissions::filament-spatie.select-team-hint')),
                             ]),
-                    ]),
+                    ])->columnSpan(['default' => config('filament-spatie-roles-permissions.layout.resources.default_section_column_span', null)]),
             ]);
     }
 

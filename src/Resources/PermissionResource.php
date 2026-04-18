@@ -108,7 +108,7 @@ class PermissionResource extends Resource
                                     }
                                 )
                                 ->preload(config('filament-spatie-roles-permissions.preload_roles', true)),
-                        ]),
+                        ])->columnSpan(['default' => config('filament-spatie-roles-permissions.layout.resources.default_section_column_span', null)]),
                     ]),
             ]);
     }
