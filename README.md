@@ -245,6 +245,10 @@ Follow the instructions on [Filament Multi-tenancy](https://filamentphp.com/docs
 
 In the **filament-spatie-roles-permissions.php** config file, you can customize the permission generation
 
+If you are using a custom theme from a previous version of filament then there is a possibility that the layout 
+for the roles and permissions will not be full-width. 
+You can set the default column span to 'full' in the config to preserve the v3 default (full-width) layout.
+
 ## Security
 
 If you discover any security related issues, please create an issue.

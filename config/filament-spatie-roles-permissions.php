@@ -220,4 +220,14 @@ return [
 
         'policies_namespace' => 'App\Policies',
     ],
+    /**
+     * Implemented to allow customisation of the resource layout due to a change in Filament since v4
+     * If you have a custom theme and need to restore the layout to pre-Filament 4, set this to 'full'
+     * @see \Filament\Support\Concerns\CanSpanColumns::columnSpan
+     */
+    'layout' => [
+        'resources' => [
+            'default_section_column_span' => null
+        ]
+    ]
 ];
