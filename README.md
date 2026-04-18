@@ -123,10 +123,12 @@ If you need those features, use [`althinect/enum-permission`](https://github.com
 
 ## Installation
 
+> Important: these docs describe the v4 rewrite, which currently requires installing the beta release explicitly.
+
 Install the plugin:
 
 ```bash
-composer require althinect/filament-spatie-roles-permissions
+composer require althinect/filament-spatie-roles-permissions:^4.0@beta
 ```
 
 Installing this plugin also installs `althinect/enum-permission` as a dependency.
