@@ -22,7 +22,6 @@ use Illuminate\Validation\Rules\Unique;
 use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use UnitEnum;
 
 class RoleResource extends Resource
 {
@@ -53,13 +52,19 @@ class RoleResource extends Resource
         return __('filament-spatie-roles-permissions::filament-spatie.section.role');
     }
 
-    public static function getNavigationGroup(): UnitEnum|string|null
+    public static function getNavigationGroup(): ?string
     {
         $navigationGroup = config('filament-spatie-roles-permissions.navigation_section_group', 'filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions');
 
-        return $navigationGroup instanceof UnitEnum
-            ? $navigationGroup :
-            __($navigationGroup);
+        if ($navigationGroup instanceof \BackedEnum) {
+            return (string) $navigationGroup->value;
+        }
+
+        if ($navigationGroup instanceof \UnitEnum) {
+            return $navigationGroup->name;
+        }
+
+        return __($navigationGroup);
     }
 
     public static function getNavigationSort(): ?int
