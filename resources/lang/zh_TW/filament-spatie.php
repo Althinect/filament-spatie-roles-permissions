@@ -27,6 +27,6 @@ return [
     'section.roles' => '角色',
     'section.roles_and_permissions' => '角色和權限',
     'select-team' => '選擇團隊',
-    'select-team-hint' => '保持空白為使用默認角色',
+    'select-team-hint' => '保持空白為使用全域角色',
     'section.users' => '使用者',
 ];
