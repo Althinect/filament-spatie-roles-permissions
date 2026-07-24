@@ -63,7 +63,8 @@ class RoleForm
                             ->searchable()
                             ->preload()
                             ->visible(fn (): bool => TenancySupport::shouldShowTeamSelector())
-                            ->required(fn (): bool => TenancySupport::shouldShowTeamSelector()),
+                            ->required(fn (): bool => TenancySupport::shouldShowTeamSelector()
+                                && ! Config::get('teams.allow_global_roles', false)),
                     ]),
                 Section::make(__('filament-spatie-roles-permissions::filament-spatie.section.permissions'))
                     ->visibleOn('create')

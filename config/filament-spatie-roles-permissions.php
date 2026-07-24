@@ -70,6 +70,7 @@ return [
         'ownership_relationship' => 'teams',
         'title_attribute' => 'name',
         'foreign_key' => null,
+        'allow_global_roles' => false,
     ],
 
     'tenancy' => [

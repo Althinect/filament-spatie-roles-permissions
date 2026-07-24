@@ -115,6 +115,25 @@ it('hides the permission selector on the edit role form', function (): void {
         ->not->toHaveKey('permissions');
 });
 
+it('requires a team by default when the central team selector is shown', function (): void {
+    config()->set('permission.teams', true);
+    config()->set('filament-spatie-roles-permissions.tenancy.enabled', false);
+
+    $schema = RoleForm::configure(Schema::make(app(CreateRole::class))->operation('create'));
+
+    expect($schema->getFlatFields()['team_id']->isRequired())->toBeTrue();
+});
+
+it('allows a global role when configured in central team mode', function (): void {
+    config()->set('permission.teams', true);
+    config()->set('filament-spatie-roles-permissions.tenancy.enabled', false);
+    config()->set('filament-spatie-roles-permissions.teams.allow_global_roles', true);
+
+    $schema = RoleForm::configure(Schema::make(app(CreateRole::class))->operation('create'));
+
+    expect($schema->getFlatFields()['team_id']->isRequired())->toBeFalse();
+});
+
 it('does not change permissions when saving a role edit', function (): void {
     $permission = Permission::query()->create([
         'name' => 'users.create',

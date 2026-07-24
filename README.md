@@ -68,7 +68,7 @@ It provides:
 - permission assignment when creating a role
 - permission management for existing roles via the relation manager
 - attach, detach, and bulk detach permission actions on existing roles
-- optional team selection when Spatie teams are enabled without an active Filament tenant
+- central team selection when Spatie teams are enabled without an active Filament tenant
 
 ### Permissions resource
 
@@ -107,6 +107,14 @@ If you use Spatie teams together with Filament tenancy, the plugin can:
 - clear the permission cache when the tenant changes
 
 If tenancy is enabled in this package while `permission.teams` is disabled, the plugin fails fast with a clear configuration exception.
+
+Central panels require a team by default. To allow a global role with no team, enable the explicit opt-in:
+
+```php
+'teams' => [
+    'allow_global_roles' => true,
+],
+```
 
 ## What this package no longer does
 
@@ -220,7 +228,7 @@ The config file is organized into small, focused sections.
 | `guards` | Configure fallback labels, badge colors, and defaults | `fallback`, `colors`, `default`, `show` |
 | `roles` | Tune role resource behavior | `preload_permissions`, `redirect_after_create`, `relation_managers` |
 | `permissions` | Tune permission resource behavior | `grouping`, `bulk_assignment`, `preload_roles` |
-| `teams` | Configure central team selection | `model`, `ownership_relationship`, `title_attribute`, `foreign_key` |
+| `teams` | Configure central team selection | `model`, `ownership_relationship`, `title_attribute`, `foreign_key`, `allow_global_roles` |
 | `tenancy` | Configure Filament tenancy integration | `enabled`, `scope_to_current_tenant`, `sync_team_context`, `clear_permission_cache_on_tenant_switch` |
 
 The published config file is the best source of truth for the available options:
