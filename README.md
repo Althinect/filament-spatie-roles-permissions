@@ -26,7 +26,7 @@ The package split is deliberate:
 
 This means you can use the enum-based permission workflow in projects, packages, and services that do not use Filament at all.
 
-This plugin still depends on `althinect/enum-permission`, but only as the source of permission metadata and generation workflow — not as a bundled UI concern.
+`althinect/enum-permission` is an optional companion when you want enum-based permission generation and syncing; the Filament UI works without it.
 
 ## An opinionated approach to permissions
 
@@ -52,8 +52,8 @@ It is not the only valid way to model permissions, but it is the path these pack
 - PHP 8.4+
 - Laravel 13+
 - Filament 5+
-- `spatie/laravel-permission` 6.x
-- `althinect/enum-permission` 1.x
+- `spatie/laravel-permission` 8.x
+- Optional: `althinect/enum-permission` 1.x for enum generation and syncing
 
 ## What this package does
 
@@ -139,7 +139,11 @@ Install the plugin:
 composer require althinect/filament-spatie-roles-permissions:^4.0@beta
 ```
 
-Installing this plugin also installs `althinect/enum-permission` as a dependency.
+If you use enum-based permission generation and syncing, install the companion package as well:
+
+```bash
+composer require althinect/enum-permission
+```
 
 If you have not already set up Spatie Permission, publish its config and migrations first:
 
@@ -147,7 +151,7 @@ If you have not already set up Spatie Permission, publish its config and migrati
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
-Publish the `enum-permission` config so you can define your permission generation workflow:
+If you installed `enum-permission`, publish its config to define your permission generation workflow:
 
 ```bash
 php artisan vendor:publish --tag="enum-permission-config"
@@ -193,7 +197,7 @@ $panel
 
 ## Permission generation lives in `enum-permission`
 
-This plugin is fully dependent on `althinect/enum-permission` for permission generation and syncing.
+Permission generation and syncing are provided by the optional `althinect/enum-permission` companion package.
 
 For convenience, the most common workflow looks like this:
 
